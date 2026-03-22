@@ -1,4 +1,5 @@
 import React from 'react';
+import { GraduationCap, Leaf, Heart, Globe } from 'lucide-react';
 
 const Founders: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ const Founders: React.FC = () => {
         </p>
         <div className="founders-grid">
           <div className="founder-card">
-            <div className="avatar">&#128105;&#8205;&#127891;</div>
+            <div className="avatar"><GraduationCap size={48} /></div>
             <h3>Founder 1</h3>
             <p className="role">Co-Founder &amp; Director</p>
             <p>
@@ -29,7 +30,7 @@ const Founders: React.FC = () => {
             </p>
           </div>
           <div className="founder-card">
-            <div className="avatar">&#128104;&#8205;&#127891;</div>
+            <div className="avatar"><GraduationCap size={48} /></div>
             <h3>Founder 2</h3>
             <p className="role">Co-Founder &amp; Director</p>
             <p>
@@ -51,7 +52,7 @@ const Founders: React.FC = () => {
           </p>
           <div className="cards">
             <div className="card">
-              <div className="card-icon">&#127807;</div>
+              <div className="card-icon"><Leaf size={32} /></div>
               <h3>Child-Centred Learning</h3>
               <p>
                 Every child is unique. We observe, guide and support each
@@ -60,7 +61,7 @@ const Founders: React.FC = () => {
               </p>
             </div>
             <div className="card">
-              <div className="card-icon">&#128591;</div>
+              <div className="card-icon"><Heart size={32} /></div>
               <h3>Rooted in Values</h3>
               <p>
                 Sanskaar - the values of respect, kindness, honesty and empathy -
@@ -68,7 +69,7 @@ const Founders: React.FC = () => {
               </p>
             </div>
             <div className="card">
-              <div className="card-icon">&#127758;</div>
+              <div className="card-icon"><Globe size={32} /></div>
               <h3>Holistic Development</h3>
               <p>
                 We nurture the whole child - cognitive, emotional, social and

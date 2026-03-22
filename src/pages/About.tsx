@@ -1,4 +1,5 @@
 import React from 'react';
+import { Target, Eye, HeartHandshake, Microscope, HandHeart, Shield, Users } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
@@ -43,7 +44,7 @@ const About: React.FC = () => {
           </p>
           <div className="cards">
             <div className="card">
-              <div className="card-icon">&#127919;</div>
+              <div className="card-icon"><Target size={32} /></div>
               <h3>Our Mission</h3>
               <p>
                 To provide a holistic Montessori education rooted in Indian
@@ -52,7 +53,7 @@ const About: React.FC = () => {
               </p>
             </div>
             <div className="card">
-              <div className="card-icon">&#128065;</div>
+              <div className="card-icon"><Eye size={32} /></div>
               <h3>Our Vision</h3>
               <p>
                 To be a trusted name in early childhood education, where every
@@ -61,7 +62,7 @@ const About: React.FC = () => {
               </p>
             </div>
             <div className="card">
-              <div className="card-icon">&#128147;</div>
+              <div className="card-icon"><HeartHandshake size={32} /></div>
               <h3>Our Values</h3>
               <p>
                 Respect, empathy, integrity, joyful learning, inclusivity and a
@@ -79,7 +80,7 @@ const About: React.FC = () => {
         <p className="section-subtitle">Play - Learn - Grow</p>
         <div className="cards">
           <div className="card">
-            <div className="card-icon">&#128301;</div>
+            <div className="card-icon"><Microscope size={32} /></div>
             <h3>Montessori Method</h3>
             <p>
               Child-led, hands-on learning that fosters independence, critical
@@ -87,7 +88,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#128588;</div>
+            <div className="card-icon"><HandHeart size={32} /></div>
             <h3>Value-Based Approach</h3>
             <p>
               We integrate Sanskaar (values) into daily activities, nurturing
@@ -95,7 +96,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#129309;</div>
+            <div className="card-icon"><Shield size={32} /></div>
             <h3>Safe &amp; Caring</h3>
             <p>
               A warm, secure environment where children feel loved, respected
@@ -103,7 +104,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#128106;</div>
+            <div className="card-icon"><Users size={32} /></div>
             <h3>Small Class Sizes</h3>
             <p>
               Personalised attention ensures every child receives the guidance

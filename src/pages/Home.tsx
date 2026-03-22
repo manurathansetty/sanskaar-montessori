@@ -1,4 +1,5 @@
 import React from 'react';
+import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
@@ -18,22 +19,22 @@ const Home: React.FC = () => {
       <div className="section-alt">
         <div className="highlights">
           <div className="highlight-item">
-            <div className="icon">&#127793;</div>
+            <div className="icon"><Sprout size={32} /></div>
             <h3>Play</h3>
             <p>Hands-on, child-led activities that spark curiosity and imagination</p>
           </div>
           <div className="highlight-item">
-            <div className="icon">&#128218;</div>
+            <div className="icon"><BookOpen size={32} /></div>
             <h3>Learn</h3>
             <p>Montessori-based curriculum designed for holistic development</p>
           </div>
           <div className="highlight-item">
-            <div className="icon">&#127775;</div>
+            <div className="icon"><Star size={32} /></div>
             <h3>Grow</h3>
             <p>Nurturing values, confidence and life skills in every child</p>
           </div>
           <div className="highlight-item">
-            <div className="icon">&#127968;</div>
+            <div className="icon"><HomeIcon size={32} /></div>
             <h3>Day Care</h3>
             <p>Day care facility also available for working parents</p>
           </div>
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
         </p>
         <div className="cards">
           <div className="card">
-            <div className="card-icon">&#128118;</div>
+            <div className="card-icon"><Baby size={32} /></div>
             <h3>Toddler Program</h3>
             <p>
               For ages 18 months to 3 years. A gentle introduction to structured
@@ -56,7 +57,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#127912;</div>
+            <div className="card-icon"><Palette size={32} /></div>
             <h3>Pre-Primary Program</h3>
             <p>
               For ages 3 to 6 years. A Montessori-based curriculum that builds
@@ -64,7 +65,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#128153;</div>
+            <div className="card-icon"><Heart size={32} /></div>
             <h3>Value-Based Education</h3>
             <p>
               Sanskaar (values) are at the heart of everything we do. We instil
@@ -72,7 +73,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="card">
-            <div className="card-icon">&#9968;</div>
+            <div className="card-icon"><Sun size={32} /></div>
             <h3>Day Care Facility</h3>
             <p>
               Extended care available for working parents. A safe and engaging
