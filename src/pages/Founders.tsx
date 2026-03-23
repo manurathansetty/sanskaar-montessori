@@ -19,25 +19,66 @@ const Founders: React.FC = () => {
         <div className="founders-grid">
           <div className="founder-card">
             <div className="avatar"><GraduationCap size={48} /></div>
-            <h3>Founder 1</h3>
-            <p className="role">Co-Founder &amp; Director</p>
+            <h3>Sushma Nagendra</h3>
+            <p className="role">Founder &amp; Director</p>
             <p>
-              With a deep passion for early childhood education and the
-              Montessori philosophy, our founder brings years of experience in
-              creating nurturing learning environments. Their vision is to blend
-              the best of Montessori methodology with the richness of Indian
-              values to shape confident, compassionate children.
+              Sushma Nagendra, the founder of Sanskaar Montessori, is a passionate
+              educator dedicated to nurturing young minds with care, understanding
+              and purpose. She holds a Bachelor of Arts degree, along with
+              certifications in Montessori Education for Pre-Primary, Primary and
+              Elementary levels. She has also completed her Diploma in NTT and an
+              ECCE certification from Finland, reflecting her commitment to global
+              best practices in early childhood education. Currently, she is
+              pursuing a PG Diploma in Inclusive Education to deepen her
+              understanding of diverse learning needs.
+            </p>
+            <p>
+              With over 17 years of experience working with early years children,
+              Sushma has continuously evolved in her understanding of child
+              development. Her journey has led her to rediscover and reimagine the
+              uniqueness of every child—how each one grows, learns and expresses
+              differently at every stage. This deep insight became the foundation
+              for conceiving Sanskaar Montessori, a truly child-centric space that
+              offers freedom with limits, while nurturing strong values and a sense
+              of responsibility.
+            </p>
+            <p>
+              Her growing interest in inclusive education has further strengthened
+              her vision. She strongly believes in creating classrooms where
+              children with intellectual disabilities are meaningfully included and
+              supported according to their individual needs. For Sushma, this
+              journey is one of continuous learning and growth. With every child she
+              meets, she continues to learn, evolve and refine her approach—ensuring
+              that Sanskaar Montessori remains a space where every child feels
+              valued, understood and empowered to thrive.
             </p>
           </div>
           <div className="founder-card">
             <div className="avatar"><GraduationCap size={48} /></div>
-            <h3>Founder 2</h3>
+            <h3>Smt. Shwetha V</h3>
             <p className="role">Co-Founder &amp; Director</p>
             <p>
-              Committed to building a safe and joyful space for children, our
-              co-founder focuses on curriculum development and community
-              engagement. Their belief that every child deserves a strong
-              foundation of values drives the ethos of Sanskaar Montessori.
+              Smt. Shwetha V, the co-founder of Sanskaar Montessori, is a graduate
+              in Bachelor of Commerce from Bangalore University, with over 5 years
+              of professional experience in Accounts and Administration. While her
+              career began in the corporate field, her true passion has always been
+              working with children—especially toddlers during their most formative
+              years.
+            </p>
+            <p>
+              Driven by a deep interest in early childhood education, she has
+              embraced the Montessori philosophy, which encourages independence,
+              hands-on learning and respect for each child's unique pace of
+              development. Starting Sanskaar Montessori is not just a professional
+              step, but a heartfelt journey to create a safe, joyful and
+              stimulating environment for young learners.
+            </p>
+            <p>
+              She believes in continuously taking up new challenges and growing
+              alongside the children she teaches. At Sanskaar Montessori, our goal
+              is to build a strong foundation for every child—academically, socially
+              and emotionally—while making learning a joyful and meaningful
+              experience.
             </p>
           </div>
         </div>

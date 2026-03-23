@@ -68,16 +68,18 @@ const Home: React.FC = () => {
             <div className="card-icon"><Heart size={32} /></div>
             <h3>Value-Based Education</h3>
             <p>
-              Sanskaar (values) are at the heart of everything we do. We instil
-              respect, empathy, kindness and responsibility.
+              Sanskaar (values) are at the heart of everything we do. Kindness,
+              respect, empathy and responsibility are lived experiences, not
+              just taught concepts.
             </p>
           </div>
           <div className="card">
             <div className="card-icon"><Sun size={32} /></div>
             <h3>Day Care Facility</h3>
             <p>
-              Extended care available for working parents. A safe and engaging
-              environment throughout the day.
+              A space where children actively participate in daily routines,
+              learn to care for their environment and build meaningful
+              relationships with their peers.
             </p>
           </div>
         </div>

@@ -17,19 +17,46 @@ const About: React.FC = () => {
             <img src="/poster.jpg" alt="Sanskaar Montessori" />
           </div>
           <div className="text">
-            <h3>Who We Are</h3>
+            <h3>Why Sanskaar?</h3>
             <p>
-              Sanskaar Montessori is a child-centric learning space dedicated to
-              nurturing young minds through the Montessori method combined with
-              strong Indian values (Sanskaar). We believe that every child is
-              unique, and our role is to provide a safe, caring and joyful
-              environment where they can explore, discover and grow at their own
-              pace.
+              The name, tagline and logo—"Rooted in Values, Growing with
+              Joy"—beautifully reflect our philosophy. At Sanskaar, we believe
+              that true education begins with values. Sanskaar Montessori was
+              conceived with a deep commitment to nurturing not just academic
+              growth, but the character and inner strength of every child. We
+              create an environment where kindness, respect, empathy and
+              responsibility are lived experiences, not just taught concepts.
             </p>
             <p>
-              We cater to children aged 18 months to 6 years, offering both a
-              structured Montessori curriculum and a day care facility for
-              working parents.
+              At Sanskaar Montessori, learning goes far beyond the classroom
+              walls—it comes alive through real-world experiences. Children step
+              into their neighbourhoods to explore places like bakeries, grocery
+              stores, tailor shops and local markets, gaining practical
+              knowledge, language and numerical skills that connect learning
+              with life. These experiences nurture curiosity, confidence and a
+              deeper understanding of the world around them.
+            </p>
+            <p>
+              We also believe in building a strong school–parent partnership and
+              warmly invite parents to volunteer in selected activities, becoming
+              a meaningful part of their child's learning journey.
+            </p>
+            <p>
+              Sanskaar Montessori and Day Care is a truly child-centric
+              environment that welcomes children from all backgrounds. Here,
+              every child is respected as an individual and encouraged to learn
+              at their own pace, with joy and without pressure. We cater to
+              children aged 18 months to 6 years, nurturing independence,
+              responsibility and a natural love for learning—laying a strong
+              foundation for life.
+            </p>
+            <p>
+              Our day care extends this philosophy beyond supervision. It is a
+              space where children actively participate in daily routines, learn
+              to care for their environment and build meaningful relationships
+              with their peers. Every moment is an opportunity for growth,
+              discovery and connection—ensuring that each child feels secure,
+              valued and inspired every single day.
             </p>
           </div>
         </div>
