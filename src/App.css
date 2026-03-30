@@ -249,7 +249,6 @@ img {
 .card p {
   color: var(--text-mid);
   font-size: 0.95rem;
-  text-align: justify;
 }
 
 /* ===== Highlights ===== */
@@ -327,7 +326,6 @@ img {
   padding: 2rem;
   box-shadow: var(--shadow);
   border-left: 4px solid var(--green-mid);
-  text-align: justify;
 }
 
 .content-box p {
@@ -358,7 +356,6 @@ img {
   border-top: 4px solid var(--green-mid);
   max-width: 800px;
   margin: 0 auto;
-  text-align: justify;
 }
 
 .content-box-centered .card-icon {
@@ -381,7 +378,6 @@ img {
   border: 1px solid rgba(46, 139, 87, 0.15);
   max-width: 900px;
   margin: 0 auto;
-  text-align: justify;
 }
 
 .content-box-featured .card-icon {
@@ -527,7 +523,6 @@ img {
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow);
   border-left: 4px solid var(--green-mid);
-  text-align: justify;
 }
 
 .founder-section-card h3 {
