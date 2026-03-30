@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, Eye, HeartHandshake, Microscope, HandHeart, Shield, Users } from 'lucide-react';
+import { Target, Eye, HeartHandshake, Heart, Lightbulb, Users, BookOpen, Smile, HandHeart, Microscope } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const About: React.FC = () => {
         <p>Discover the heart and soul of Sanskaar Montessori</p>
       </div>
 
-      {/* About Intro */}
+      {/* Why Sanskaar */}
       <section className="section">
         <div className="about-intro">
           <div>
@@ -18,126 +18,115 @@ const About: React.FC = () => {
           </div>
           <div className="text">
             <h3>Why Sanskaar?</h3>
-            <p>
-              The name, tagline and logo—"Rooted in Values, Growing with
-              Joy"—beautifully reflect our philosophy. At Sanskaar, we believe
-              that true education begins with values. Sanskaar Montessori was
-              conceived with a deep commitment to nurturing not just academic
-              growth, but the character and inner strength of every child. We
-              create an environment where kindness, respect, empathy and
-              responsibility are lived experiences, not just taught concepts.
-            </p>
-            <p>
-              At Sanskaar Montessori, learning goes far beyond the classroom
-              walls—it comes alive through real-world experiences. Children step
-              into their neighbourhoods to explore places like bakeries, grocery
-              stores, tailor shops and local markets, gaining practical
-              knowledge, language and numerical skills that connect learning
-              with life. These experiences nurture curiosity, confidence and a
-              deeper understanding of the world around them.
-            </p>
-            <p>
-              We also believe in building a strong school–parent partnership and
-              warmly invite parents to volunteer in selected activities, becoming
-              a meaningful part of their child's learning journey.
-            </p>
-            <p>
-              Sanskaar Montessori and Day Care is a truly child-centric
-              environment that welcomes children from all backgrounds. Here,
-              every child is respected as an individual and encouraged to learn
-              at their own pace, with joy and without pressure. We cater to
-              children aged 18 months to 6 years, nurturing independence,
-              responsibility and a natural love for learning—laying a strong
-              foundation for life.
-            </p>
-            <p>
-              Our day care extends this philosophy beyond supervision. It is a
-              space where children actively participate in daily routines, learn
-              to care for their environment and build meaningful relationships
-              with their peers. Every moment is an opportunity for growth,
-              discovery and connection—ensuring that each child feels secure,
-              valued and inspired every single day.
-            </p>
+            <div className="content-box">
+              <p>
+                At Sanskaar Montessori, our name is our promise. "Rooted in Values, Growing with Joy" is not just a tagline—it is the soul of everything we do.
+              </p>
+              <p>
+                We believe education begins beyond books—with values that shape character, choices and life. At Sanskaar, children don't just learn… they become—kind, respectful, empathetic and responsible individuals.
+              </p>
+              <p>
+                <strong>Learning here is alive.</strong> From exploring neighbourhood spaces like bakeries, markets and local stores to engaging in real-world experiences, children connect knowledge with life—building confidence, curiosity and practical understanding every day.
+              </p>
+              <p>
+                <strong>We cherish the power of partnership.</strong> Parents are not spectators, but co-travellers in this journey—invited to participate, engage and grow alongside their children.
+              </p>
+              <p>
+                <strong>Every child at Sanskaar is seen, heard and valued.</strong> In our nurturing, child-centric environment, children learn at their own pace—free from pressure, full of joy—developing independence, responsibility and a lifelong love for learning.
+              </p>
+              <p>
+                <strong>Our Day Care is an extension of this philosophy.</strong> More than care, it is a space of belonging—where children engage in meaningful routines, build relationships and grow in a secure, loving environment.
+              </p>
+              <p className="highlight-text">
+                At Sanskaar, we don't just prepare children for school. We prepare them for life.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Mission */}
       <div className="section-alt">
         <section className="section">
-          <h2>Our Mission &amp; Vision</h2>
+          <h2>Our Mission</h2>
+          <div className="content-box-centered">
+            <div className="card-icon"><Target size={40} /></div>
+            <p>
+              At Sanskaar Montessori, our mission is to nurture independent, confident and compassionate learners by providing a child-centric environment rooted in strong values. We aim to foster curiosity, creativity and a lifelong love for learning through meaningful experiences, while supporting each child's unique pace of growth. Through a balance of guidance, freedom and real-world exposure, we strive to build responsible individuals who are prepared not just for school, but for life.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      {/* Vision */}
+      <section className="section">
+        <h2>Our Vision</h2>
+        <div className="content-box-centered">
+          <div className="card-icon"><Eye size={40} /></div>
+          <p>
+            At Sanskaar Montessori, our vision is to create a nurturing and inspiring space where every child grows into a confident, compassionate and responsible individual. We envision a learning community rooted in strong values, where children develop a deep love for learning, respect for others and a meaningful connection with the world around them. Our goal is to lay a strong foundation that empowers children to become thoughtful, independent learners and positive contributors to society.
+          </p>
+        </div>
+      </section>
+
+      {/* Values */}
+      <div className="section-alt">
+        <section className="section">
+          <h2>Our Values</h2>
           <p className="section-subtitle">
-            Building strong foundations, one child at a time
+            The pillars of our educational philosophy
           </p>
           <div className="cards">
             <div className="card">
-              <div className="card-icon"><Target size={32} /></div>
-              <h3>Our Mission</h3>
-              <p>
-                To provide a holistic Montessori education rooted in Indian
-                values, empowering children to become confident, compassionate
-                and curious lifelong learners.
-              </p>
-            </div>
-            <div className="card">
-              <div className="card-icon"><Eye size={32} /></div>
-              <h3>Our Vision</h3>
-              <p>
-                To be a trusted name in early childhood education, where every
-                child's potential is recognised, nurtured and celebrated in an
-                environment of love and respect.
-              </p>
-            </div>
-            <div className="card">
               <div className="card-icon"><HeartHandshake size={32} /></div>
-              <h3>Our Values</h3>
-              <p>
-                Respect, empathy, integrity, joyful learning, inclusivity and a
-                deep connection to cultural roots form the pillars of our
-                educational philosophy.
-              </p>
+              <h3>Respect</h3>
+              <p>We honour every child, family and educator—creating a culture of mutual respect and understanding.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><Heart size={32} /></div>
+              <h3>Kindness &amp; Empathy</h3>
+              <p>Children learn to care for others, building emotional intelligence and compassion in every interaction.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><Lightbulb size={32} /></div>
+              <h3>Independence</h3>
+              <p>We empower children to think, choose and act for themselves—building confidence and self-reliance.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><HandHeart size={32} /></div>
+              <h3>Responsibility</h3>
+              <p>Children learn to care for themselves, their environment and their community.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><BookOpen size={32} /></div>
+              <h3>Curiosity &amp; Love for Learning</h3>
+              <p>We nurture a natural desire to explore, question and discover—making learning a joyful journey.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><Users size={32} /></div>
+              <h3>Inclusivity</h3>
+              <p>Every child is welcomed, valued and supported regardless of their background or abilities.</p>
+            </div>
+            <div className="card">
+              <div className="card-icon"><Smile size={32} /></div>
+              <h3>Joyful Learning</h3>
+              <p>Learning should be fun, engaging and meaningful—filled with wonder and delight.</p>
             </div>
           </div>
         </section>
       </div>
 
-      {/* Why Choose Us */}
+      {/* Montessori Method */}
       <section className="section">
-        <h2>Why Choose Sanskaar Montessori?</h2>
-        <p className="section-subtitle">Play - Learn - Grow</p>
-        <div className="cards">
-          <div className="card">
-            <div className="card-icon"><Microscope size={32} /></div>
-            <h3>Montessori Method</h3>
-            <p>
-              Child-led, hands-on learning that fosters independence, critical
-              thinking and a love of discovery.
-            </p>
-          </div>
-          <div className="card">
-            <div className="card-icon"><HandHeart size={32} /></div>
-            <h3>Value-Based Approach</h3>
-            <p>
-              We integrate Sanskaar (values) into daily activities, nurturing
-              character alongside academics.
-            </p>
-          </div>
-          <div className="card">
-            <div className="card-icon"><Shield size={32} /></div>
-            <h3>Safe &amp; Caring</h3>
-            <p>
-              A warm, secure environment where children feel loved, respected
-              and free to express themselves.
-            </p>
-          </div>
-          <div className="card">
-            <div className="card-icon"><Users size={32} /></div>
-            <h3>Small Class Sizes</h3>
-            <p>
-              Personalised attention ensures every child receives the guidance
-              and support they need to thrive.
-            </p>
-          </div>
+        <h2>Montessori Method at Sanskaar</h2>
+        <div className="content-box-featured">
+          <div className="card-icon"><Microscope size={40} /></div>
+          <p>
+            At Sanskaar Montessori, we follow the Montessori approach as a way of life rather than just a method of teaching. Our classrooms are thoughtfully prepared to encourage independence, exploration and self-directed learning, where children choose activities based on their interests and developmental needs.
+          </p>
+          <p>
+            With the guidance of trained adults, children engage with hands-on Montessori materials that build concentration, coordination and critical thinking. We respect each child's unique pace of learning, allowing them the freedom to discover, make choices and grow with confidence—fostering a deep sense of responsibility, discipline and a lifelong love for learning.
+          </p>
         </div>
       </section>
 

@@ -249,6 +249,7 @@ img {
 .card p {
   color: var(--text-mid);
   font-size: 0.95rem;
+  text-align: justify;
 }
 
 /* ===== Highlights ===== */
@@ -319,18 +320,101 @@ img {
   word-break: break-all;
 }
 
+/* ===== Content Boxes ===== */
+.content-box {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--green-mid);
+  text-align: justify;
+}
+
+.content-box p {
+  color: var(--text-mid);
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  font-size: 0.98rem;
+}
+
+.content-box p:last-child {
+  margin-bottom: 0;
+}
+
+.content-box .highlight-text {
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 1.05rem;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.content-box-centered {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--green-mid);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: justify;
+}
+
+.content-box-centered .card-icon {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--green-mid);
+}
+
+.content-box-centered p {
+  color: var(--text-mid);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.content-box-featured {
+  background: linear-gradient(135deg, var(--off-white), #e8f5e9);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(46, 139, 87, 0.15);
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: justify;
+}
+
+.content-box-featured .card-icon {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--green-dark);
+}
+
+.content-box-featured p {
+  color: var(--text-mid);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.content-box-featured p:last-child {
+  margin-bottom: 0;
+}
+
 /* ===== About Page ===== */
 .about-intro {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  align-items: center;
+  align-items: start;
   margin-top: 2rem;
 }
 
 .about-intro img {
   border-radius: 12px;
   box-shadow: var(--shadow);
+  position: sticky;
+  top: 100px;
 }
 
 .about-intro .text h3 {
@@ -393,6 +477,71 @@ img {
   font-size: 0.95rem;
 }
 
+/* Founder Profile (Website Highlight) */
+.founder-profile {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.founder-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--off-white), #e8f5e9);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.founder-profile-header .avatar {
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-light), var(--blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+.founder-profile-header h2 {
+  color: var(--green-dark);
+  font-size: 1.8rem;
+  margin-bottom: 0.25rem;
+  text-align: left;
+}
+
+.founder-profile-header .role {
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.founder-section-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--green-mid);
+  text-align: justify;
+}
+
+.founder-section-card h3 {
+  color: var(--green-dark);
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.founder-section-card p {
+  color: var(--text-mid);
+  line-height: 1.8;
+  font-size: 0.98rem;
+}
+
 /* ===== Events ===== */
 .events-grid {
   display: grid;
@@ -452,6 +601,17 @@ img {
 
 .event-card .event-body .btn:hover {
   background: var(--green-dark);
+}
+
+.event-card .event-body .event-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.event-card .summer-camp-header {
+  background: linear-gradient(135deg, #e65100, #ff8f00);
 }
 
 /* ===== CTA Banner ===== */
@@ -591,6 +751,26 @@ img {
 
   .about-intro {
     grid-template-columns: 1fr;
+  }
+
+  .about-intro img {
+    position: static;
+  }
+
+  .founder-profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .founder-profile-header h2 {
+    text-align: center;
+  }
+
+  .content-box,
+  .content-box-centered,
+  .content-box-featured,
+  .founder-section-card {
+    padding: 1.5rem;
   }
 
   .section {
