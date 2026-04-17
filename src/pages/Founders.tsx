@@ -18,18 +18,18 @@ const Founders: React.FC = () => {
         </p>
         <div className="founder-article">
           <div className="founder-photo">
-            <img src="/sushma.jpg" alt="Sushma Nagendra" />
+            <img src="/sushma.jpg" alt="Smt. Sushma Nagendra" />
           </div>
-          <h3>Sushma Nagendra</h3>
+          <h3>Smt. Sushma Nagendra</h3>
           <p className="role">Founder &amp; Director</p>
           <p>
-            Sushma Nagendra is a passionate educator dedicated to nurturing young minds with care, understanding and purpose. She holds a Bachelor of Arts degree, along with certifications in Montessori Education for Pre-Primary, Primary and Elementary levels. She has also completed her Diploma in NTT and an ECCE certification from Finland, reflecting her commitment to global best practices in early childhood education. Currently, she is pursuing a PG Diploma in Inclusive Education to deepen her understanding of diverse learning needs.
+            Smt. Sushma Nagendra is a passionate educator dedicated to nurturing young minds with care, understanding and purpose. She holds a Bachelor of Arts degree, along with certifications in Montessori Education for Pre-Primary, Primary and Elementary levels. She has also completed her Diploma in NTT and an ECCE certification from Finland, reflecting her commitment to global best practices in early childhood education. Currently, she is pursuing a PG Diploma in Inclusive Education to deepen her understanding of diverse learning needs.
           </p>
           <p>
-            With over 18 years of experience working with early years children, Sushma has continuously evolved in her understanding of child development. Her journey has led her to rediscover and reimagine the uniqueness of every child—how each one grows, learns and expresses differently at every stage. This deep insight became the foundation for conceiving Sanskaar Montessori, a truly child-centric space that offers freedom with limits, while nurturing strong values and a sense of responsibility.
+            With over 18 years of experience working with early years children, Smt. Sushma has continuously evolved in her understanding of child development. Her journey has led her to rediscover and reimagine the uniqueness of every child—how each one grows, learns and expresses differently at every stage. This deep insight became the foundation for conceiving Sanskaar Montessori, a truly child-centric space that offers freedom with limits, while nurturing strong values and a sense of responsibility.
           </p>
           <p>
-            Her growing interest in inclusive education has further strengthened her vision. She strongly believes in creating classrooms where children with intellectual disabilities are meaningfully included and supported according to their individual needs. For Sushma, this journey is one of continuous learning and growth. With every child she meets, she continues to learn, evolve and refine her approach—ensuring that Sanskaar Montessori remains a space where every child feels valued, understood and empowered to thrive.
+            Her growing interest in inclusive education has further strengthened her vision. She strongly believes in creating classrooms where children with intellectual disabilities are meaningfully included and supported according to their individual needs. For Smt. Sushma, this journey is one of continuous learning and growth. With every child she meets, she continues to learn, evolve and refine her approach—ensuring that Sanskaar Montessori remains a space where every child feels valued, understood and empowered to thrive.
           </p>
         </div>
 

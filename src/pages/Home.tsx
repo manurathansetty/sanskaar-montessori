@@ -127,11 +127,11 @@ const Home: React.FC = () => {
             <ClipboardEdit size={36} />
           </div>
           <div className="signup-card-text">
-            <h2>Sign Up for Our Events</h2>
+            <h2>Sign Up for Our Programmes &amp; Events</h2>
             <p>
-              Register your interest in upcoming events, the Summer Camp and
-              admissions updates at Sanskaar Montessori. Takes less than a
-              minute.
+              Register your interest in our Day Care, After School Program,
+              Summer Camp and admissions at Sanskaar Montessori. Takes less
+              than a minute.
             </p>
           </div>
           <a

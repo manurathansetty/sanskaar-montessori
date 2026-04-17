@@ -1,5 +1,5 @@
 import React from 'react';
-import { DoorOpen, Calendar, Sun, Clock, Users, Sparkles, Tag, GraduationCap, BadgePercent, Home, BookOpen, Shield } from 'lucide-react';
+import { DoorOpen, Calendar, Sun, Clock, Users, Sparkles, GraduationCap, BadgePercent, Home, BookOpen, Shield } from 'lucide-react';
 import EventActions from '../components/EventActions';
 
 const Events: React.FC = () => {
@@ -7,8 +7,8 @@ const Events: React.FC = () => {
     <>
       {/* Page Header */}
       <div className="page-header">
-        <h1>Events</h1>
-        <p>Stay updated with our latest activities and celebrations</p>
+        <h1>Programmes &amp; Events</h1>
+        <p>Our ongoing programmes and upcoming events at Sanskaar Montessori</p>
       </div>
 
       {/* Featured: Summer Camp */}
@@ -56,13 +56,6 @@ const Events: React.FC = () => {
                     <div>
                       <span className="meta-label">Age Group</span>
                       <span className="meta-value">3+ years</span>
-                    </div>
-                  </div>
-                  <div className="meta-pill meta-pill-accent">
-                    <Tag size={18} />
-                    <div>
-                      <span className="meta-label">Introductory Offer</span>
-                      <span className="meta-value">₹4,000/-</span>
                     </div>
                   </div>
                 </div>

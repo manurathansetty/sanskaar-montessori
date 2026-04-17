@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
             <li><Link to="/about">About Us</Link></li>
             <li><Link to="/founders">About Founders</Link></li>
             <li><Link to="/gallery">Gallery</Link></li>
-            <li><Link to="/events">Events</Link></li>
+            <li><Link to="/events">Programmes &amp; Events</Link></li>
           </ul>
         </div>
         <div className="footer-col">

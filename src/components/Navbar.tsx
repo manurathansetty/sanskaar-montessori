@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
         <li><Link to="/about" className={isActive('/about')} onClick={() => setMenuOpen(false)}>About Us</Link></li>
         <li><Link to="/founders" className={isActive('/founders')} onClick={() => setMenuOpen(false)}>About Founders</Link></li>
         <li><Link to="/gallery" className={isActive('/gallery')} onClick={() => setMenuOpen(false)}>Gallery</Link></li>
-        <li><Link to="/events" className={isActive('/events')} onClick={() => setMenuOpen(false)}>Events</Link></li>
+        <li><Link to="/events" className={isActive('/events')} onClick={() => setMenuOpen(false)}>Programmes &amp; Events</Link></li>
       </ul>
     </nav>
   );
