@@ -111,6 +111,64 @@ const Gallery: React.FC = () => {
     };
   }, [activeIndex, close, next, prev]);
 
+  useEffect(() => {
+    const rows = Array.from(
+      document.querySelectorAll<HTMLDivElement>('.gallery-row')
+    );
+    const cleanups: Array<() => void> = [];
+
+    rows.forEach((row) => {
+      let lastTouchX = 0;
+      let pulled = 0;
+
+      const reset = () => {
+        if (pulled === 0) return;
+        row.style.transition =
+          'transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.05)';
+        row.style.transform = 'translateX(0)';
+        pulled = 0;
+      };
+
+      const onTouchStart = (e: TouchEvent) => {
+        lastTouchX = e.touches[0].clientX;
+        pulled = 0;
+        row.style.transition = 'none';
+      };
+
+      const onTouchMove = (e: TouchEvent) => {
+        const x = e.touches[0].clientX;
+        const dx = x - lastTouchX;
+        lastTouchX = x;
+        const max = row.scrollWidth - row.clientWidth;
+        const atStart = row.scrollLeft <= 0;
+        const atEnd = row.scrollLeft >= max - 1;
+        const enteringPull =
+          (atStart && dx > 0) || (atEnd && dx < 0);
+        if (enteringPull || pulled !== 0) {
+          pulled += dx / 3;
+          if (atStart && pulled < 0) pulled = 0;
+          if (atEnd && pulled > 0) pulled = 0;
+          row.style.transform = `translateX(${pulled}px)`;
+          if (pulled !== 0) e.preventDefault();
+        }
+      };
+
+      row.addEventListener('touchstart', onTouchStart, { passive: true });
+      row.addEventListener('touchmove', onTouchMove, { passive: false });
+      row.addEventListener('touchend', reset);
+      row.addEventListener('touchcancel', reset);
+
+      cleanups.push(() => {
+        row.removeEventListener('touchstart', onTouchStart);
+        row.removeEventListener('touchmove', onTouchMove);
+        row.removeEventListener('touchend', reset);
+        row.removeEventListener('touchcancel', reset);
+      });
+    });
+
+    return () => cleanups.forEach((c) => c());
+  }, []);
+
   const openPhoto = (photo: Photo) => {
     const idx = allPhotos.findIndex((p) => p.src === photo.src);
     if (idx >= 0) setActiveIndex(idx);
