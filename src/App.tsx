@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import MapFab from './components/MapFab';
 import Home from './pages/Home';
 import About from './pages/About';
 import Founders from './pages/Founders';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
           <Route path="/events" element={<Events />} />
         </Routes>
         <Footer />
+        <MapFab />
       </div>
     </Router>
   );

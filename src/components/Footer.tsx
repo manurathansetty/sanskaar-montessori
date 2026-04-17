@@ -29,6 +29,15 @@ const Footer: React.FC = () => {
             <a href="tel:+919113805407">+91 91138 05407</a><br />
             <a href="tel:+918105358074">+91 81053 58074</a>
           </p>
+          <p style={{ marginTop: '0.75rem' }}>
+            <a
+              href="https://share.google/QyuzA210g7jqGHGS4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              📍 Find us on Google Maps
+            </a>
+          </p>
         </div>
       </div>
       <div className="footer-bottom">

@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Source images — keep locally but don't ship to Vercel
+/public/images/
+/public/New 2/
+

@@ -1,11 +1,22 @@
 import React from 'react';
-import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit } from 'lucide-react';
+
+const FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
 
 const Home: React.FC = () => {
   return (
     <>
       {/* Hero */}
-      <section className="hero">
+      <section
+        className="hero"
+        style={{
+          backgroundImage:
+            'linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%), url("/gallery/mathematics-03.jpg")',
+          backgroundPosition: 'center 35%',
+        }}
+      >
         <span className="badge">Admissions Open 2026-2027</span>
         <h1>Sanskaar Montessori</h1>
         <p className="tagline">Rooted in Values, Growing with Joy</p>
@@ -40,6 +51,30 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Glimpses Strip */}
+      <section className="section glimpses">
+        <h2>A Glimpse Into Our World</h2>
+        <p className="section-subtitle">
+          Moments of joy, learning and discovery at Sanskaar Montessori
+        </p>
+        <div className="glimpses-strip">
+          <Link to="/gallery" className="glimpse-tile">
+            <img src="/gallery/mathematics-03.jpg" alt="Children at Sanskaar Montessori" loading="lazy" />
+          </Link>
+          <Link to="/gallery" className="glimpse-tile">
+            <img src="/gallery/language-kannada-02.jpg" alt="Hands-on Montessori activities" loading="lazy" />
+          </Link>
+          <Link to="/gallery" className="glimpse-tile">
+            <img src="/gallery/gardening-03.jpg" alt="Joyful learning moments" loading="lazy" />
+          </Link>
+        </div>
+        <div className="glimpses-cta">
+          <Link to="/gallery" className="btn-link">
+            View Full Gallery <ArrowRight size={18} />
+          </Link>
+        </div>
+      </section>
 
       {/* What We Offer */}
       <section className="section">
@@ -85,40 +120,30 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Google Form Embed Section */}
-      <div className="form-section">
-        <section className="section">
-          <h2>Sign Up for Our Events</h2>
-          <p className="section-subtitle">
-            Register your interest in upcoming events at Sanskaar Montessori
-          </p>
-          <div className="form-container">
-            {/*
-              TO EMBED YOUR GOOGLE FORM:
-              Replace the placeholder div below with:
-              <iframe
-                src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true"
-                width="100%"
-                height="800"
-                frameBorder="0"
-                title="Event Registration Form"
-              >
-                Loading...
-              </iframe>
-            */}
-            <div className="placeholder-msg">
-              <p><strong>Google Form will appear here</strong></p>
-              <p>
-                To embed your Google Form, open <code>src/pages/Home.tsx</code> and
-                replace this placeholder with your Google Form iframe embed code.
-              </p>
-              <code>
-                {`<iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" width="100%" height="800" frameBorder="0" title="Event Registration">Loading...</iframe>`}
-              </code>
-            </div>
+      {/* Sign Up CTA */}
+      <section className="section">
+        <div className="signup-card">
+          <div className="signup-card-icon">
+            <ClipboardEdit size={36} />
           </div>
-        </section>
-      </div>
+          <div className="signup-card-text">
+            <h2>Sign Up for Our Events</h2>
+            <p>
+              Register your interest in upcoming events, the Summer Camp and
+              admissions updates at Sanskaar Montessori. Takes less than a
+              minute.
+            </p>
+          </div>
+          <a
+            href={FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-cta-primary"
+          >
+            Open Sign-Up Form <ArrowRight size={18} />
+          </a>
+        </div>
+      </section>
 
       {/* CTA Banner */}
       <div className="cta-banner">

@@ -1,44 +1,99 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Edit this list as you add photos to public/gallery/
-const photos: { src: string; alt: string }[] = [
-  { src: '/gallery/photo-01.jpg', alt: 'Children engaged in Montessori activity' },
-  { src: '/gallery/photo-02.jpg', alt: 'Sanskaar Montessori classroom' },
-  { src: '/gallery/photo-03.jpg', alt: 'Learning with Montessori materials' },
-  { src: '/gallery/photo-04.jpg', alt: 'Outdoor play at Sanskaar' },
-  { src: '/gallery/photo-05.jpg', alt: 'Art and creative expression' },
-  { src: '/gallery/photo-06.jpg', alt: 'Storytime at Sanskaar Montessori' },
-  { src: '/gallery/photo-07.jpg', alt: 'Sensory exploration activity' },
-  { src: '/gallery/photo-08.jpg', alt: 'Children collaborating' },
-  { src: '/gallery/photo-09.jpg', alt: 'Practical life skills' },
-  { src: '/gallery/photo-10.jpg', alt: 'Cultural celebration' },
-  { src: '/gallery/photo-11.jpg', alt: 'Exploring nature' },
-  { src: '/gallery/photo-12.jpg', alt: 'Music and movement' },
-  { src: '/gallery/photo-13.jpg', alt: 'Reading corner' },
-  { src: '/gallery/photo-14.jpg', alt: 'Classroom environment' },
-  { src: '/gallery/photo-15.jpg', alt: 'Hands-on learning' },
-  { src: '/gallery/photo-16.jpg', alt: 'Festival celebration' },
-  { src: '/gallery/photo-17.jpg', alt: 'Free-choice activity time' },
-  { src: '/gallery/photo-18.jpg', alt: 'Snack time together' },
-  { src: '/gallery/photo-19.jpg', alt: 'Group learning' },
-  { src: '/gallery/photo-20.jpg', alt: 'Joyful moments at Sanskaar' },
+type Photo = { src: string; alt: string };
+type Category = { title: string; description: string; photos: Photo[] };
+
+const categories: Category[] = [
+  {
+    title: 'The Prepared Environment',
+    description: 'Thoughtfully arranged Montessori classrooms',
+    photos: [
+      { src: '/gallery/classroom-01.jpg', alt: 'Sensorial shelf with knobbed cylinders' },
+      { src: '/gallery/classroom-02.jpg', alt: 'Practical Life shelf with steel tableware' },
+      { src: '/gallery/classroom-03.jpg', alt: 'Botany and zoology puzzles with globes' },
+    ],
+  },
+  {
+    title: 'Practical Life',
+    description: 'Everyday skills that build independence',
+    photos: [
+      { src: '/gallery/practical-life-01.jpg', alt: 'Child pouring at a Montessori low table' },
+      { src: '/gallery/practical-life-02.jpg', alt: 'Practical Life shelf with lock boards' },
+    ],
+  },
+  {
+    title: 'Language',
+    description: 'Building words and confidence in Kannada and English',
+    photos: [
+      { src: '/gallery/language-kannada-02.jpg', alt: 'Building words with the Kannada movable alphabet' },
+      { src: '/gallery/language-english-02.jpg', alt: 'Composing words with letter tiles' },
+    ],
+  },
+  {
+    title: 'Mathematics',
+    description: 'Concrete-to-abstract number work',
+    photos: [
+      { src: '/gallery/mathematics-01.jpg', alt: 'Red and blue number rods' },
+      { src: '/gallery/mathematics-02.jpg', alt: 'Spindle box work' },
+      { src: '/gallery/mathematics-03.jpg', alt: 'Counting with colour-coded cubes' },
+    ],
+  },
+  {
+    title: 'Cultural Studies',
+    description: 'Geography, biology and a sense of the world',
+    photos: [
+      { src: '/gallery/geography-01.jpg', alt: 'Exploring the globe' },
+      { src: '/gallery/geography-02.jpg', alt: 'Friends learning geography together' },
+    ],
+  },
+  {
+    title: 'Art & Creative Expression',
+    description: 'Printing, colouring and open-ended making',
+    photos: [
+      { src: '/gallery/art-craft-01.jpg', alt: 'Stamping and printing at the craft table' },
+      { src: '/gallery/art-craft-02.jpg', alt: 'Creative work with crayons' },
+    ],
+  },
+  {
+    title: 'Story Time & Reading',
+    description: 'Building a lifelong love for books',
+    photos: [
+      { src: '/gallery/story-time-01.jpg', alt: 'Teacher reading aloud to the class' },
+      { src: '/gallery/story-time-02.jpg', alt: 'Children reading in a circle' },
+      { src: '/gallery/story-time-03.jpg', alt: 'Quiet reading by the library shelves' },
+    ],
+  },
+  {
+    title: 'Summer Camp — Gardening',
+    description: 'Little hands, growing things',
+    photos: [
+      { src: '/gallery/gardening-01.jpg', alt: 'Observing young plants in the garden' },
+      { src: '/gallery/gardening-02.jpg', alt: 'Digging and sowing seeds' },
+      { src: '/gallery/gardening-03.jpg', alt: 'Planting a rose together' },
+    ],
+  },
 ];
 
 const Gallery: React.FC = () => {
+  const allPhotos = useMemo(
+    () => categories.flatMap((c) => c.photos),
+    []
+  );
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const close = useCallback(() => setActiveIndex(null), []);
   const next = useCallback(
-    () => setActiveIndex((i) => (i === null ? null : (i + 1) % photos.length)),
-    []
+    () => setActiveIndex((i) => (i === null ? null : (i + 1) % allPhotos.length)),
+    [allPhotos.length]
   );
   const prev = useCallback(
     () =>
       setActiveIndex((i) =>
-        i === null ? null : (i - 1 + photos.length) % photos.length
+        i === null ? null : (i - 1 + allPhotos.length) % allPhotos.length
       ),
-    []
+    [allPhotos.length]
   );
 
   useEffect(() => {
@@ -56,39 +111,43 @@ const Gallery: React.FC = () => {
     };
   }, [activeIndex, close, next, prev]);
 
+  const openPhoto = (photo: Photo) => {
+    const idx = allPhotos.findIndex((p) => p.src === photo.src);
+    if (idx >= 0) setActiveIndex(idx);
+  };
+
   return (
     <>
-      {/* Page Header */}
       <div className="page-header">
         <h1>Gallery</h1>
         <p>Moments from life at Sanskaar Montessori</p>
       </div>
 
-      {/* Gallery Grid */}
-      <section className="section">
-        <div className="gallery-grid">
-          {photos.map((photo, i) => (
-            <button
-              key={photo.src}
-              className="gallery-item"
-              onClick={() => setActiveIndex(i)}
-              aria-label={`Open ${photo.alt}`}
+      <section className="section gallery-categories">
+        {categories.map((cat) => (
+          <div key={cat.title} className="gallery-category">
+            <div className="gallery-category-header">
+              <h2>{cat.title}</h2>
+              <p>{cat.description}</p>
+            </div>
+            <div
+              className={`gallery-row gallery-row-${cat.photos.length}`}
             >
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                loading="lazy"
-                onError={(e) => {
-                  (e.currentTarget.parentElement as HTMLElement).style.display =
-                    'none';
-                }}
-              />
-            </button>
-          ))}
-        </div>
+              {cat.photos.map((photo) => (
+                <button
+                  key={photo.src}
+                  className="gallery-item"
+                  onClick={() => openPhoto(photo)}
+                  aria-label={`Open ${photo.alt}`}
+                >
+                  <img src={photo.src} alt={photo.alt} loading="lazy" />
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
 
-      {/* Lightbox */}
       {activeIndex !== null && (
         <div className="lightbox" onClick={close} role="dialog" aria-modal="true">
           <button
@@ -109,8 +168,8 @@ const Gallery: React.FC = () => {
             <ChevronLeft size={32} />
           </button>
           <img
-            src={photos[activeIndex].src}
-            alt={photos[activeIndex].alt}
+            src={allPhotos[activeIndex].src}
+            alt={allPhotos[activeIndex].alt}
             className="lightbox-image"
             onClick={(e) => e.stopPropagation()}
           />
@@ -127,7 +186,6 @@ const Gallery: React.FC = () => {
         </div>
       )}
 
-      {/* CTA */}
       <div className="cta-banner">
         <h2>Want to Visit Us?</h2>
         <p>Come experience Sanskaar Montessori in person.</p>
