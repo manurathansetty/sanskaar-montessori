@@ -1607,21 +1607,42 @@ img {
   font-size: 1.1rem;
 }
 
+.cta-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 .cta-banner .btn-cta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   background: var(--yellow);
   color: var(--text-dark);
-  padding: 0.75rem 2.5rem;
+  padding: 0.75rem 2.2rem;
   border-radius: 50px;
   font-weight: 700;
   font-size: 1.1rem;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s;
   text-decoration: none;
 }
 
 .cta-banner .btn-cta:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cta-banner .btn-cta-outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+  padding: calc(0.75rem - 2px) calc(2.2rem - 2px);
+}
+
+.cta-banner .btn-cta-outline:hover {
+  background: var(--white);
+  color: var(--green-dark);
 }
 
 /* ===== Admissions Banner (hero-style) ===== */

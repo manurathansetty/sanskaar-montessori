@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Phone, MapPin } from 'lucide-react';
 
 type Photo = { src: string; alt: string };
 type Category = { title: string; description: string; photos: Photo[] };
@@ -189,9 +189,19 @@ const Gallery: React.FC = () => {
       <div className="cta-banner">
         <h2>Want to Visit Us?</h2>
         <p>Come experience Sanskaar Montessori in person.</p>
-        <a href="tel:+919113805407" className="btn-cta">
-          Call Us: +91 91138 05407
-        </a>
+        <div className="cta-banner-actions">
+          <a href="tel:+919113805407" className="btn-cta">
+            <Phone size={18} /> +91 91138 05407
+          </a>
+          <a
+            href="https://share.google/QyuzA210g7jqGHGS4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-cta btn-cta-outline"
+          >
+            <MapPin size={18} /> Get Directions
+          </a>
+        </div>
       </div>
     </>
   );
