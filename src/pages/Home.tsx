@@ -145,14 +145,19 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <div className="cta-banner">
-        <h2>Admissions Open for 2026-2027</h2>
-        <p>Give your child the gift of joyful, value-based learning. Enrol today!</p>
-        <a href="tel:+919113805407" className="btn-cta">
-          Call Us: +91 91138 05407
-        </a>
-      </div>
+      {/* Admissions Banner */}
+      <Link
+        to="/events"
+        className="cta-banner cta-banner-admissions"
+        aria-label="Admissions Open 2026-2027 — view details"
+      >
+        <span className="badge">Admissions Open</span>
+        <h2>2026-2027</h2>
+        <p>For children 18 months to 6 years · Day Care &amp; After-School Program available</p>
+        <span className="btn-cta">
+          View Admissions Details <ArrowRight size={18} />
+        </span>
+      </Link>
     </>
   );
 };
