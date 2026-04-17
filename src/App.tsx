@@ -1,17 +1,31 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import About from './pages/About';
+import Founders from './pages/Founders';
+import Gallery from './pages/Gallery';
+import Events from './pages/Events';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="coming-soon">
-      <img src="/logo.jpg" alt="Sanskaar Montessori" className="coming-soon-logo" />
-      <h1>Sanskaar Montessori</h1>
-      <p className="coming-soon-tagline">Rooted in Values, Growing with Joy</p>
-      <div className="coming-soon-divider"></div>
-      <h2>Coming Soon...</h2>
-      <p className="coming-soon-text">We're building something beautiful for our little learners. Stay tuned!</p>
-      <a href="tel:+919113805407" className="coming-soon-contact">+91 91138 05407</a>
-    </div>
+    <Router>
+      <ScrollToTop />
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/founders" element={<Founders />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/events" element={<Events />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 
