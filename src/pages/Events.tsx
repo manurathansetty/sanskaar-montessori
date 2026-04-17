@@ -1,5 +1,5 @@
 import React from 'react';
-import { DoorOpen, Calendar, Sun, Clock, Users, Sparkles, Tag, GraduationCap, BadgePercent } from 'lucide-react';
+import { DoorOpen, Calendar, Sun, Clock, Users, Sparkles, Tag, GraduationCap, BadgePercent, Home, BookOpen, Shield } from 'lucide-react';
 import EventActions from '../components/EventActions';
 
 const Events: React.FC = () => {
@@ -135,26 +135,144 @@ const Events: React.FC = () => {
         </div>
       </section>
 
-      {/* Open House / Open Day */}
+      {/* Featured: Day Care */}
+      <div className="section-alt">
+        <section className="section">
+          <div className="featured-event">
+            <div className="featured-event-badge">
+              <Home size={14} /> Programme
+            </div>
+            <div className="featured-event-grid">
+              <div className="featured-event-media">
+                <img
+                  src="/gallery/day-care-programme.jpg"
+                  alt="Sanskaar Montessori Day Care — a second home for your child"
+                />
+              </div>
+              <div className="featured-event-content">
+                <span className="featured-event-eyebrow">
+                  <Home size={16} /> Day Care
+                </span>
+                <h2>A Second Home for Your Child</h2>
+                <p className="featured-event-lede">
+                  A safe, loving space filled with care, warmth and joyful learning — just like home. More than daycare, it's where your child is understood, nurtured and celebrated every day.
+                </p>
+
+                <div className="featured-event-meta">
+                  <div className="meta-pill">
+                    <Users size={18} />
+                    <div>
+                      <span className="meta-label">Age Group</span>
+                      <span className="meta-value">18 months – 6 years</span>
+                    </div>
+                  </div>
+                  <div className="meta-pill">
+                    <Clock size={18} />
+                    <div>
+                      <span className="meta-label">Timings</span>
+                      <span className="meta-value">Flexible, full day</span>
+                    </div>
+                  </div>
+                  <div className="meta-pill">
+                    <Shield size={18} />
+                    <div>
+                      <span className="meta-label">Safety</span>
+                      <span className="meta-value">CCTV monitored</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="featured-event-tags">
+                  <span className="event-tag">Warm &amp; Secure Environment</span>
+                  <span className="event-tag">Caring &amp; Trained Educators</span>
+                  <span className="event-tag">Montessori-Inspired Activities</span>
+                  <span className="event-tag">Healthy Routine &amp; Nap Time</span>
+                  <span className="event-tag">Clean &amp; Hygienic Space</span>
+                </div>
+
+                <EventActions />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Featured: After School Program */}
       <section className="section">
-        <h2>Open House at Sanskaar Montessori</h2>
-        <p className="section-subtitle">
-          Visit us, meet our educators and see our Montessori approach in action
-        </p>
-        <div className="content-box-featured">
-          <div className="card-icon"><DoorOpen size={40} /></div>
-          <p>
-            An Open House at Sanskaar Montessori is a welcoming opportunity for parents to step into our learning environment and experience our philosophy in action. It is a time to explore our thoughtfully prepared classrooms, understand the Montessori approach we follow and see how children learn through hands-on experiences and real-life connections.
-          </p>
-          <p>
-            During the Open House, parents can interact with our educators, gain insights into our child-centric practices and understand how we nurture independence, values and a love for learning.
-          </p>
-          <p className="open-house-meta">
-            <span className="soon-tag">Coming Soon</span>
-            <span>Dates to be announced</span>
-          </p>
+        <div className="featured-event">
+          <div className="featured-event-badge">
+            <BookOpen size={14} /> Programme
+          </div>
+          <div className="featured-event-grid">
+            <div className="featured-event-media">
+              <img
+                src="/gallery/after-school-programme.jpg"
+                alt="Sanskaar Montessori After School Program (ASP)"
+              />
+            </div>
+            <div className="featured-event-content">
+              <span className="featured-event-eyebrow">
+                <BookOpen size={16} /> After School Program (ASP)
+              </span>
+              <h2>A Nurturing Space Beyond School Hours</h2>
+              <p className="featured-event-lede">
+                A 'home away from home' where children feel secure, happy and inspired to learn, explore and grow every day.
+              </p>
+
+              <div className="featured-event-meta">
+                <div className="meta-pill">
+                  <Users size={18} />
+                  <div>
+                    <span className="meta-label">Age Group</span>
+                    <span className="meta-value">3 – 10 years</span>
+                  </div>
+                </div>
+                <div className="meta-pill">
+                  <Clock size={18} />
+                  <div>
+                    <span className="meta-label">Timings</span>
+                    <span className="meta-value">Flexible for working parents</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="featured-event-tags">
+                <span className="event-tag">Homework Support</span>
+                <span className="event-tag">Creative Activities</span>
+                <span className="event-tag">Science-Based Learning</span>
+                <span className="event-tag">Skill Development</span>
+                <span className="event-tag">Structured Routine</span>
+                <span className="event-tag">Healthy Habits</span>
+              </div>
+
+              <EventActions />
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* Open House / Open Day */}
+      <div className="section-alt">
+        <section className="section">
+          <h2>Open House at Sanskaar Montessori</h2>
+          <p className="section-subtitle">
+            Visit us, meet our educators and see our Montessori approach in action
+          </p>
+          <div className="content-box-featured">
+            <div className="card-icon"><DoorOpen size={40} /></div>
+            <p>
+              An Open House at Sanskaar Montessori is a welcoming opportunity for parents to step into our learning environment and experience our philosophy in action. It is a time to explore our thoughtfully prepared classrooms, understand the Montessori approach we follow and see how children learn through hands-on experiences and real-life connections.
+            </p>
+            <p>
+              During the Open House, parents can interact with our educators, gain insights into our child-centric practices and understand how we nurture independence, values and a love for learning.
+            </p>
+            <p className="open-house-meta">
+              <span className="soon-tag">Coming Soon</span>
+              <span>Dates to be announced</span>
+            </p>
+          </div>
+        </section>
+      </div>
 
       {/* CTA */}
       <div className="cta-banner">
