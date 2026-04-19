@@ -26,7 +26,13 @@ const AdminDashboard: React.FC<Props> = ({ phone, onLogout }) => {
         </div>
       </header>
       <main style={styles.main}>
-        <p>You're signed in. Content management features coming soon.</p>
+        <a href="/admin/images" style={styles.card}>
+          <div style={styles.cardEmoji}>🖼️</div>
+          <div>
+            <div style={styles.cardTitle}>Manage Images</div>
+            <div style={styles.cardSub}>Gallery, events, founders, home</div>
+          </div>
+        </a>
       </main>
     </div>
   );
@@ -54,6 +60,22 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
   },
   main: { lineHeight: 1.6 },
+  card: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    padding: '1rem 1.25rem',
+    border: '1px solid #e6e6e6',
+    borderRadius: 10,
+    background: '#fff',
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
+    maxWidth: 420,
+  },
+  cardEmoji: { fontSize: 28 },
+  cardTitle: { fontWeight: 600, fontSize: 16 },
+  cardSub: { fontSize: 13, color: '#666' },
 };
 
 export default AdminDashboard;
