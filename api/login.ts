@@ -43,10 +43,12 @@ export default async function handler(
     return res.status(401).json({ error: 'Invalid phone or password' });
   }
 
+  // Normalize the allowlist too, so ADMIN_PHONES can be stored in any
+  // accepted format (with or without +91, with spaces/dashes, etc.).
   const allowed = adminPhonesRaw
     .split(',')
-    .map((p) => p.trim())
-    .filter(Boolean);
+    .map((p) => normalizePhone(p.trim()))
+    .filter((p): p is string => p !== null);
 
   const phoneOk = allowed.includes(normalized);
   const passwordOk = constantTimeEquals(password, adminPassword);

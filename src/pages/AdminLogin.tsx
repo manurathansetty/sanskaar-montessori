@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -50,14 +52,24 @@ const AdminLogin: React.FC = () => {
         </label>
         <label style={styles.label}>
           Password
-          <input
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
+          <div style={styles.passwordWrap}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={styles.passwordInput}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              style={styles.eyeBtn}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </label>
         {error && <div style={styles.error}>{error}</div>}
         <button type="submit" disabled={submitting} style={styles.button}>
@@ -101,6 +113,35 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid #ccc',
     borderRadius: 8,
     outline: 'none',
+  },
+  passwordWrap: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: '10px 40px 10px 12px',
+    fontSize: 16,
+    border: '1px solid #ccc',
+    borderRadius: 8,
+    outline: 'none',
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+  eyeBtn: {
+    position: 'absolute',
+    right: 8,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    padding: 6,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#666',
   },
   error: { color: '#b00020', fontSize: 14 },
   button: {
