@@ -5,7 +5,6 @@ import {
   isValidCategory,
   findSlot,
   folderPath,
-  singlePublicId,
 } from '../../src/content/image-slots';
 
 export default async function handler(
@@ -40,9 +39,12 @@ export default async function handler(
 
   try {
     if (slot.type === 'single') {
+      // Cloudinary concatenates folder + public_id when both are sent, so
+      // pass only the slot leaf. Final stored asset id becomes
+      // `sanskaar/<category>/<slotId>` — matching the migration script.
       const params = signUploadParams({
         folder: `sanskaar/${category}`,
-        publicId: singlePublicId(category, slotId),
+        publicId: slotId,
         overwrite: true,
       });
       return res.status(200).json(params);
