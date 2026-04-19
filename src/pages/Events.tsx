@@ -1,6 +1,7 @@
 import React from 'react';
 import { DoorOpen, Calendar, Sun, Clock, Users, Sparkles, GraduationCap, BadgePercent, Home, BookOpen, Shield } from 'lucide-react';
 import EventActions from '../components/EventActions';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const Events: React.FC = () => {
   return (
@@ -20,9 +21,10 @@ const Events: React.FC = () => {
             </div>
             <div className="featured-event-grid">
               <div className="featured-event-media">
-                <img
-                  src="/summer_camp.jpg"
+                <CloudinaryImage
+                  publicId="sanskaar/events/summer-camp"
                   alt="Sanskaar Montessori Summer Camp 2026"
+                  width={800}
                 />
               </div>
               <div className="featured-event-content">
@@ -83,9 +85,10 @@ const Events: React.FC = () => {
           </div>
           <div className="featured-event-grid">
             <div className="featured-event-media">
-              <img
-                src="/gallery/admissions-01.jpg"
+              <CloudinaryImage
+                publicId="sanskaar/events/admissions"
                 alt="Sanskaar Montessori Admissions 2026-2027 Introductory Offer"
+                width={800}
               />
             </div>
             <div className="featured-event-content">
@@ -137,9 +140,10 @@ const Events: React.FC = () => {
             </div>
             <div className="featured-event-grid">
               <div className="featured-event-media">
-                <img
-                  src="/gallery/day-care-programme.jpg"
+                <CloudinaryImage
+                  publicId="sanskaar/events/day-care"
                   alt="Sanskaar Montessori Day Care — a second home for your child"
+                  width={800}
                 />
               </div>
               <div className="featured-event-content">
@@ -198,9 +202,10 @@ const Events: React.FC = () => {
           </div>
           <div className="featured-event-grid">
             <div className="featured-event-media">
-              <img
-                src="/gallery/after-school-programme.jpg"
+              <CloudinaryImage
+                publicId="sanskaar/events/after-school"
                 alt="Sanskaar Montessori After School Program (ASP)"
+                width={800}
               />
             </div>
             <div className="featured-event-content">
