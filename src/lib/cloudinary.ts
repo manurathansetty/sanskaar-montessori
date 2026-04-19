@@ -86,6 +86,21 @@ export async function listImages(folder: string): Promise<CloudinaryResource[]> 
   });
 }
 
+// Lists every image under any subfolder of `prefix` (recursive). Used by the
+// batch /api/images/category endpoint so the public Gallery page makes one
+// Cloudinary call instead of one per slot.
+export async function listImagesByPrefix(
+  prefix: string
+): Promise<CloudinaryResource[]> {
+  ensureConfigured();
+  const result = await cloudinary.search
+    .expression(`folder:${prefix}/*`)
+    .with_field('context')
+    .max_results(500)
+    .execute();
+  return (result.resources ?? []) as CloudinaryResource[];
+}
+
 export async function setImageSort(
   publicId: string,
   sort: number

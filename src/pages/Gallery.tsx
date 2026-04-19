@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { X, ChevronLeft, ChevronRight, Phone, MapPin } from 'lucide-react';
 import CloudinaryImage from '../components/CloudinaryImage';
-import { useSlotImages, type SlotImage } from '../hooks/useSlotImages';
+import SkeletonBox from '../components/SkeletonBox';
+import { useCategoryImages } from '../hooks/useCategoryImages';
+import type { SlotImage } from '../hooks/useSlotImages';
 import { SLOTS } from '../content/image-slots';
 
 type CategoryMeta = { title: string; description: string };
@@ -41,41 +43,21 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   },
 };
 
-type LoadedSection = {
-  slotId: string;
-  title: string;
-  description: string;
-  status: 'loading' | 'success' | 'error' | 'empty';
-  error?: string;
-  images: SlotImage[];
-};
+// How many skeleton tiles to show per section while loading. Matches the
+// typical count we have post-migration so the layout doesn't jump much.
+const SKELETON_COUNT = 3;
 
 const Gallery: React.FC = () => {
-  // Call the hook once per slot. SLOTS.gallery is a module constant with
-  // stable order/length, so hook ordering is preserved across renders.
-  const sections: LoadedSection[] = SLOTS.gallery.map((slot) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { state } = useSlotImages('gallery', slot.id);
+  const { state } = useCategoryImages('gallery');
+
+  const sections = SLOTS.gallery.map((slot) => {
     const meta = CATEGORY_META[slot.id] ?? { title: slot.label, description: '' };
-    if (state.status === 'loading') {
-      return { slotId: slot.id, ...meta, status: 'loading', images: [] };
-    }
-    if (state.status === 'error') {
-      return {
-        slotId: slot.id,
-        ...meta,
-        status: 'error',
-        error: state.error,
-        images: [],
-      };
-    }
-    if (state.images.length === 0) {
-      return { slotId: slot.id, ...meta, status: 'empty', images: [] };
-    }
-    return { slotId: slot.id, ...meta, status: 'success', images: state.images };
+    const images: SlotImage[] =
+      state.status === 'success' ? state.slots[slot.id] ?? [] : [];
+    return { slotId: slot.id, ...meta, images };
   });
 
-  // Flatten loaded images across all sections for cross-category lightbox nav.
+  // Flatten loaded images across sections for cross-category lightbox nav.
   const allImages = useMemo(
     () =>
       sections.flatMap((s) =>
@@ -177,7 +159,6 @@ const Gallery: React.FC = () => {
     });
 
     return () => cleanups.forEach((c) => c());
-    // Re-bind whenever the loaded image set changes (rows mount/unmount).
   }, [allImages.length]);
 
   const openByPublicId = (publicId: string) => {
@@ -192,6 +173,12 @@ const Gallery: React.FC = () => {
         <p>Moments from life at Sanskaar Montessori</p>
       </div>
 
+      {state.status === 'error' && (
+        <section className="section">
+          <div className="gallery-empty">Could not load gallery: {state.error}</div>
+        </section>
+      )}
+
       <section className="section gallery-categories">
         {sections.map((cat) => (
           <div key={cat.slotId} className="gallery-category">
@@ -199,21 +186,23 @@ const Gallery: React.FC = () => {
               <h2>{cat.title}</h2>
               <p>{cat.description}</p>
             </div>
-            {cat.status === 'loading' && (
-              <div className="gallery-empty">Loading…</div>
-            )}
-            {cat.status === 'error' && (
-              <div className="gallery-empty">
-                Could not load: {cat.error}
+
+            {state.status === 'loading' && (
+              <div className={`gallery-row gallery-row-${SKELETON_COUNT}`}>
+                {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                  <div key={i} className="gallery-item">
+                    <SkeletonBox aspectRatio="4 / 3" borderRadius={8} />
+                  </div>
+                ))}
               </div>
             )}
-            {cat.status === 'empty' && (
+
+            {state.status === 'success' && cat.images.length === 0 && (
               <div className="gallery-empty">No photos yet.</div>
             )}
-            {cat.status === 'success' && (
-              <div
-                className={`gallery-row gallery-row-${cat.images.length}`}
-              >
+
+            {state.status === 'success' && cat.images.length > 0 && (
+              <div className={`gallery-row gallery-row-${cat.images.length}`}>
                 {cat.images.map((img) => (
                   <button
                     key={img.public_id}
