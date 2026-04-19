@@ -1,13 +1,16 @@
 import React from 'react';
-import { useAdminAuth } from '../hooks/useAdminAuth';
 import { useNavigate } from 'react-router-dom';
 
-const AdminDashboard: React.FC<{ phone: string }> = ({ phone }) => {
-  const { logout } = useAdminAuth();
+type Props = {
+  phone: string;
+  onLogout: () => Promise<void>;
+};
+
+const AdminDashboard: React.FC<Props> = ({ phone, onLogout }) => {
   const navigate = useNavigate();
 
-  const onLogout = async () => {
-    await logout();
+  const handleLogout = async () => {
+    await onLogout();
     navigate('/admin/login', { replace: true });
   };
 
@@ -17,7 +20,7 @@ const AdminDashboard: React.FC<{ phone: string }> = ({ phone }) => {
         <h1 style={styles.title}>Sanskaar Admin</h1>
         <div style={styles.userBlock}>
           <span style={styles.phone}>{phone}</span>
-          <button onClick={onLogout} style={styles.logoutBtn}>
+          <button onClick={handleLogout} style={styles.logoutBtn}>
             Log out
           </button>
         </div>

@@ -5,9 +5,11 @@ export type SessionData = {
   phone?: string;
 };
 
+// SESSION_SECRET is read at module load. Rotation requires a redeploy.
 export const sessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET || '',
   cookieName: 'sm_admin_session',
+  ttl: 60 * 60 * 24, // payload TTL matches cookie maxAge so the two expire together
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,

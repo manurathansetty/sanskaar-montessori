@@ -4,7 +4,7 @@ import { useAdminAuth } from '../hooks/useAdminAuth';
 import AdminDashboard from './AdminDashboard';
 
 const Admin: React.FC = () => {
-  const { state } = useAdminAuth();
+  const { state, logout } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const Admin: React.FC = () => {
   if (state.status === 'unauthenticated') {
     return null; // redirect in useEffect
   }
-  return <AdminDashboard phone={state.phone} />;
+  return <AdminDashboard phone={state.phone} onLogout={logout} />;
 };
 
 export default Admin;
