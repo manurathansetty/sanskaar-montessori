@@ -8,6 +8,7 @@ import Events from './pages/Events';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 import AdminImages from './pages/admin/AdminImages';
+import AdminImagesCategory from './pages/admin/AdminImagesCategory';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import ScrollToTop from './components/ScrollToTop';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/images" element={<AdminImages />} />
+            <Route path="/admin/images/:category" element={<AdminImagesCategory />} />
           </Route>
         </Routes>
       </div>
