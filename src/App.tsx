@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import MapFab from './components/MapFab';
 import Home from './pages/Home';
 import About from './pages/About';
 import Founders from './pages/Founders';
 import Gallery from './pages/Gallery';
 import Events from './pages/Events';
+import Admin from './pages/Admin';
+import AdminLogin from './pages/AdminLogin';
+import PublicLayout from './layouts/PublicLayout';
+import AdminLayout from './layouts/AdminLayout';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
@@ -16,16 +17,19 @@ const App: React.FC = () => {
     <Router>
       <ScrollToTop />
       <div className="App">
-        <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/founders" element={<Founders />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/events" element={<Events />} />
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/founders" element={<Founders />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/events" element={<Events />} />
+          </Route>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<Admin />} />
+          </Route>
         </Routes>
-        <Footer />
-        <MapFab />
       </div>
     </Router>
   );
