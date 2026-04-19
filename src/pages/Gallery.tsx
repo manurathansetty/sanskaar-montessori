@@ -214,6 +214,7 @@ const Gallery: React.FC = () => {
                       publicId={img.public_id}
                       alt={cat.title}
                       width={800}
+                      aspectRatio={img.width && img.height ? img.width / img.height : undefined}
                     />
                   </button>
                 ))}

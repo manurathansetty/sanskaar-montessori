@@ -19,7 +19,7 @@ const Founders: React.FC = () => {
         </p>
         <div className="founder-article">
           <div className="founder-photo">
-            <CloudinaryImage publicId="sanskaar/founders/sushma" alt="Smt. Sushma Nagendra" width={600} fit="fit" />
+            <CloudinaryImage publicId="sanskaar/founders/sushma" alt="Smt. Sushma Nagendra" width={600} aspectRatio={3 / 4} fit="fit" />
           </div>
           <h3>Smt. Sushma Nagendra</h3>
           <p className="role">Founder &amp; Director</p>
@@ -36,7 +36,7 @@ const Founders: React.FC = () => {
 
         <div className="founder-article">
           <div className="founder-photo">
-            <CloudinaryImage publicId="sanskaar/founders/shwetha" alt="Smt. Shwetha V" width={600} fit="fit" />
+            <CloudinaryImage publicId="sanskaar/founders/shwetha" alt="Smt. Shwetha V" width={600} aspectRatio={3 / 4} fit="fit" />
           </div>
           <h3>Smt. Shwetha V</h3>
           <p className="role">Co-Founder &amp; Director</p>
