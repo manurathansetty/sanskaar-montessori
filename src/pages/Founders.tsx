@@ -1,5 +1,6 @@
 import React from 'react';
 import { Leaf, Heart, Globe } from 'lucide-react';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const Founders: React.FC = () => {
   return (
@@ -18,7 +19,7 @@ const Founders: React.FC = () => {
         </p>
         <div className="founder-article">
           <div className="founder-photo">
-            <img src="/sushma.jpg" alt="Smt. Sushma Nagendra" />
+            <CloudinaryImage publicId="sanskaar/founders/sushma" alt="Smt. Sushma Nagendra" width={600} fit="fit" />
           </div>
           <h3>Smt. Sushma Nagendra</h3>
           <p className="role">Founder &amp; Director</p>
@@ -35,7 +36,7 @@ const Founders: React.FC = () => {
 
         <div className="founder-article">
           <div className="founder-photo">
-            <img src="/shwetha.jpg" alt="Smt. Shwetha V" />
+            <CloudinaryImage publicId="sanskaar/founders/shwetha" alt="Smt. Shwetha V" width={600} fit="fit" />
           </div>
           <h3>Smt. Shwetha V</h3>
           <p className="role">Co-Founder &amp; Director</p>
