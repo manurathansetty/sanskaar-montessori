@@ -1,19 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit } from 'lucide-react';
+import CloudinaryImage from '../components/CloudinaryImage';
+import { useSlotImages } from '../hooks/useSlotImages';
 
 const FORM_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
 
 const Home: React.FC = () => {
+  const langPick = useSlotImages('gallery', 'language');
+  const gardenPick = useSlotImages('gallery', 'gardening');
   return (
     <>
       {/* Hero */}
       <section
         className="hero"
         style={{
-          backgroundImage:
-            'linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%), url("/gallery/mathematics-03.jpg")',
+          backgroundImage: `linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%), url("https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_1600,q_auto,f_auto/sanskaar/home/hero")`,
           backgroundPosition: 'center 35%',
         }}
       >
@@ -60,13 +63,27 @@ const Home: React.FC = () => {
         </p>
         <div className="glimpses-strip">
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/mathematics-03.jpg" alt="Children at Sanskaar Montessori" loading="lazy" />
+            <CloudinaryImage publicId="sanskaar/home/hero" alt="Children at Sanskaar Montessori" width={600} loading="lazy" />
           </Link>
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/language-kannada-02.jpg" alt="Hands-on Montessori activities" loading="lazy" />
+            {langPick.state.status === 'success' && langPick.state.images[0] && (
+              <CloudinaryImage
+                publicId={langPick.state.images[0].public_id}
+                alt="Hands-on Montessori activities"
+                width={600}
+                loading="lazy"
+              />
+            )}
           </Link>
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/gardening-03.jpg" alt="Joyful learning moments" loading="lazy" />
+            {gardenPick.state.status === 'success' && gardenPick.state.images[0] && (
+              <CloudinaryImage
+                publicId={gardenPick.state.images[0].public_id}
+                alt="Joyful learning moments"
+                width={600}
+                loading="lazy"
+              />
+            )}
           </Link>
         </div>
         <div className="glimpses-cta">
