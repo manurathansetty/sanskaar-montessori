@@ -7,6 +7,13 @@ import { useSlotImages } from '../hooks/useSlotImages';
 const FORM_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
 
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME ?? '';
+const HERO_GRADIENT =
+  'linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%)';
+const HERO_BG = CLOUD_NAME
+  ? `${HERO_GRADIENT}, url("https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,w_1600,q_auto,f_auto/sanskaar/home/hero")`
+  : HERO_GRADIENT;
+
 const Home: React.FC = () => {
   const langPick = useSlotImages('gallery', 'language');
   const gardenPick = useSlotImages('gallery', 'gardening');
@@ -16,7 +23,7 @@ const Home: React.FC = () => {
       <section
         className="hero"
         style={{
-          backgroundImage: `linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%), url("https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_1600,q_auto,f_auto/sanskaar/home/hero")`,
+          backgroundImage: HERO_BG,
           backgroundPosition: 'center 35%',
         }}
       >

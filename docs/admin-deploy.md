@@ -25,8 +25,10 @@ rather than open.
 ## Local dev
 
 1. Copy `.env.local.example` to `.env.local` and fill in real values.
-2. Run `npm run dev` (which runs `vercel dev`) — serves CRA + API routes on
-   a single port (default 3000).
+2. Run `npm run vercel:dev` (which runs `vercel dev --listen 3000`) — serves
+   CRA + API routes on a single port (default 3000). For env vars to load on
+   first run when the project isn't linked, prefix with shell-source:
+   `set -a && source .env.local && set +a && npm run vercel:dev`.
 3. Visit `http://localhost:3000/admin` — should redirect to `/admin/login`.
 
 ## Initial migration of images (one-time, already done)
