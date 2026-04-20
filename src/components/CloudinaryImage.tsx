@@ -53,6 +53,7 @@ const CloudinaryImage: React.FC<Props> = ({
       height={height}
       alt={alt}
       loading={loading}
+      draggable={false}
       onLoad={() => setLoaded(true)}
       onError={() => setLoaded(true)}
       className={`cloudinary-img${loaded ? '' : ' cloudinary-img-loading'}${className ? ' ' + className : ''}`}

@@ -11,52 +11,61 @@ type Props = { category: Category; slot: SlotDef };
 
 const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
   const { state, refresh } = useSlotImages(category, slot.id);
-  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ done: number; total: number } | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onFilePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files ?? []);
     e.target.value = '';
-    if (!file) return;
+    if (!files.length) return;
     setUploadError(null);
-    setUploading(true);
-    try {
-      const sigRes = await fetch('/api/images/upload-signature', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ category, slot: slot.id }),
-      });
-      if (!sigRes.ok) throw new Error('Could not get upload signature');
-      const sig = (await sigRes.json()) as {
-        signature: string; timestamp: number; api_key: string;
-        cloud_name: string; folder: string; context?: string;
-      };
+    setUploadProgress({ done: 0, total: files.length });
 
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('api_key', sig.api_key);
-      fd.append('timestamp', String(sig.timestamp));
-      fd.append('signature', sig.signature);
-      fd.append('folder', sig.folder);
-      if (sig.context) fd.append('context', sig.context);
+    let errorMsg: string | null = null;
+    for (let i = 0; i < files.length; i++) {
+      try {
+        const sigRes = await fetch('/api/images/upload-signature', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ category, slot: slot.id }),
+        });
+        if (!sigRes.ok) throw new Error('Could not get upload signature');
+        const sig = (await sigRes.json()) as {
+          signature: string; timestamp: number; api_key: string;
+          cloud_name: string; folder: string; context?: string;
+        };
 
-      const upRes = await fetch(
-        `https://api.cloudinary.com/v1_1/${sig.cloud_name}/auto/upload`,
-        { method: 'POST', body: fd }
-      );
-      if (!upRes.ok) {
-        const txt = await upRes.text();
-        throw new Error(`Upload failed: ${txt}`);
+        const fd = new FormData();
+        fd.append('file', files[i]);
+        fd.append('api_key', sig.api_key);
+        fd.append('timestamp', String(sig.timestamp));
+        fd.append('signature', sig.signature);
+        fd.append('folder', sig.folder);
+        if (sig.context) fd.append('context', sig.context);
+
+        const upRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${sig.cloud_name}/auto/upload`,
+          { method: 'POST', body: fd }
+        );
+        if (!upRes.ok) {
+          const txt = await upRes.text();
+          throw new Error(`Upload failed (${files[i].name}): ${txt}`);
+        }
+
+        setUploadProgress({ done: i + 1, total: files.length });
+      } catch (err) {
+        errorMsg = (err as Error).message;
+        break;
       }
-      await refresh();
-    } catch (err) {
-      setUploadError((err as Error).message);
-    } finally {
-      setUploading(false);
     }
+
+    setUploadProgress(null);
+    if (errorMsg) setUploadError(errorMsg);
+    await refresh();
   };
 
   const onDelete = async (publicId: string) => {
@@ -77,8 +86,15 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
 
   const onDragStart = (id: string) => setDragId(id);
   const onDragOver = (e: React.DragEvent) => e.preventDefault();
+  const onDragEnter = (id: string) => setDragOverId(id);
+  const onDragLeave = (e: React.DragEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverId(null);
+  };
+  const onDragEnd = () => { setDragId(null); setDragOverId(null); };
+
   const onDrop = useCallback(
     async (targetId: string) => {
+      setDragOverId(null);
       if (!dragId || dragId === targetId || state.status !== 'success') return;
       const order = state.images.map((i) => i.public_id);
       const fromIdx = order.indexOf(dragId);
@@ -105,6 +121,12 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
   );
 
   const locked = LOCKED_CATEGORIES.has(category);
+  const uploading = uploadProgress !== null;
+  const uploadLabel = uploadProgress
+    ? uploadProgress.total === 1
+      ? 'Uploading…'
+      : `Uploading ${uploadProgress.done + 1} / ${uploadProgress.total}…`
+    : null;
 
   const uploadBtn = locked ? (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9a9288', fontWeight: 600 }}>
@@ -114,8 +136,8 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
     <button className="adm-btn-primary" onClick={() => fileRef.current?.click()} disabled={uploading}
       style={{ cursor: uploading ? 'not-allowed' : 'pointer' }}>
       {uploading
-        ? <><RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> Uploading…</>
-        : <><Upload size={14} /> Upload photo</>}
+        ? <><RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> {uploadLabel}</>
+        : <><Upload size={14} /> Upload photos</>}
     </button>
   );
 
@@ -135,10 +157,11 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
           overflow: hidden;
           background: #fffdf8;
           cursor: grab;
-          transition: box-shadow 0.18s, transform 0.18s;
+          transition: box-shadow 0.18s, transform 0.18s, border-color 0.15s, opacity 0.15s;
         }
         .adm-photo-card:hover { box-shadow: 0 6px 18px rgba(29,40,29,0.12); }
-        .adm-photo-card.dragging { opacity: 0.5; transform: scale(0.97); }
+        .adm-photo-card.dragging { opacity: 0.4; transform: scale(0.96); }
+        .adm-photo-card.drag-over { border-color: #4a7c59; box-shadow: 0 0 0 2px rgba(74,124,89,0.25); transform: scale(1.03); }
         .adm-del-btn {
           position: absolute; top: 8px; right: 8px;
           width: 30px; height: 30px; border-radius: 50%;
@@ -153,6 +176,7 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
           background: rgba(0,0,0,0.45); border-radius: 6px; padding: 3px 4px;
           color: #fff; opacity: 0; transition: opacity 0.15s;
           display: flex; align-items: center;
+          pointer-events: none;
         }
         .adm-photo-card:hover .adm-drag-handle { opacity: 1; }
       `}</style>
@@ -171,7 +195,7 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
         <div style={s.emptyBox}>
           <Upload size={28} style={{ color: '#c8c0b4', marginBottom: 8 }} />
           <div style={s.emptyText}>No photos yet</div>
-          <div style={s.emptySub}>Click "Upload photo" to get started</div>
+          <div style={s.emptySub}>Click "Upload photos" to get started</div>
         </div>
       )}
 
@@ -180,10 +204,17 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
           {state.images.map((img: SlotImage) => (
             <div
               key={img.public_id}
-              className={`adm-photo-card${dragId === img.public_id ? ' dragging' : ''}`}
+              className={[
+                'adm-photo-card',
+                dragId === img.public_id ? 'dragging' : '',
+                dragOverId === img.public_id && dragId !== img.public_id ? 'drag-over' : '',
+              ].filter(Boolean).join(' ')}
               draggable={!locked}
               onDragStart={() => !locked && onDragStart(img.public_id)}
               onDragOver={onDragOver}
+              onDragEnter={() => !locked && onDragEnter(img.public_id)}
+              onDragLeave={onDragLeave}
+              onDragEnd={onDragEnd}
               onDrop={() => !locked && onDrop(img.public_id)}
               style={locked ? { cursor: 'default' } : undefined}
             >
@@ -199,7 +230,9 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
         </div>
       )}
 
-      {!locked && <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFilePick} />}
+      {!locked && (
+        <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={onFilePick} />
+      )}
     </AdminPageShell>
   );
 };
