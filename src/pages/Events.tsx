@@ -3,7 +3,7 @@ import { DoorOpen } from 'lucide-react';
 import EventCard from '../components/EventCard';
 import { EVENTS, SITE } from '../content/site-content';
 import type { UpcomingEvent } from '../content/site-content';
-import { UPCOMING_ICON_MAP } from './admin/AdminUpcomingEvents';
+import { UPCOMING_ICON_MAP } from '../content/upcoming-icons';
 
 const Events: React.FC = () => {
   const primaryPhone = SITE.contact.phones.find(
