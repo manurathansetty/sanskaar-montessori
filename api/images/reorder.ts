@@ -13,7 +13,12 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const session = await getSession(req, res);
+  let session;
+  try {
+    session = await getSession(req, res);
+  } catch (err) {
+    return res.status(500).json({ error: 'session_error', message: (err as Error).message });
+  }
   if (!session.phone) {
     return res.status(401).json({ error: 'Not authenticated' });
   }

@@ -90,7 +90,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const cfg = CONFIG[type];
   if (!cfg) return res.status(404).json({ error: 'Not found' });
 
-  const session = await getSession(req, res);
+  let session;
+  try {
+    session = await getSession(req, res);
+  } catch (err) {
+    return res.status(500).json({ error: 'session_error', message: (err as Error).message });
+  }
   if (!session.phone) return res.status(401).json({ error: 'Unauthorized' });
 
   if (!cfg.validate(req.body)) return res.status(400).json({ error: 'validation' });
