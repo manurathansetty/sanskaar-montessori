@@ -57,9 +57,13 @@ export default async function handler(
     return res.status(401).json({ error: 'Invalid phone or password' });
   }
 
-  const session = await getSession(req, res);
-  session.phone = normalized;
-  await session.save();
-
-  return res.status(200).json({ phone: normalized });
+  try {
+    const session = await getSession(req, res);
+    session.phone = normalized;
+    await session.save();
+    return res.status(200).json({ phone: normalized });
+  } catch (err) {
+    console.error('[login] session error:', (err as Error).message);
+    return res.status(500).json({ error: 'session_error', message: (err as Error).message });
+  }
 }
