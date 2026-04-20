@@ -53,7 +53,7 @@ const AdminEventEdit: React.FC = () => {
           : { id: '', type: 'programme', eyebrow: '', title: '', lede: '', imageSlot: '', pills: [], tags: [], order: EVENTS.length + 1 }
         );
       });
-  }, [state.status]);
+  }, [state.status, id, isNew]);
 
   if (state.status !== 'authenticated' || !allEvents || !form) {
     return <AdminLoadingScreen />;

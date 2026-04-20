@@ -4,7 +4,6 @@ import CloudinaryImage from '../../components/CloudinaryImage';
 import { useSlotImages, type SlotImage } from '../../hooks/useSlotImages';
 import type { Category, SlotDef } from '../../content/image-slots';
 import AdminPageShell from '../../components/AdminPageShell';
-import AdminLoadingScreen from '../../components/AdminLoadingScreen';
 
 const LOCKED_CATEGORIES = new Set<string>(['founders', 'home']);
 
