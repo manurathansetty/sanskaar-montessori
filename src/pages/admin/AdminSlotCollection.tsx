@@ -18,53 +18,57 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const onFilePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
+    const allFiles = Array.from(e.target.files ?? []);
     e.target.value = '';
-    if (!files.length) return;
+    if (!allFiles.length) return;
+    // Single slots can only hold one image
+    const files = slot.type === 'single' ? allFiles.slice(0, 1) : allFiles;
     setUploadError(null);
     setUploadProgress({ done: 0, total: files.length });
 
-    let errorMsg: string | null = null;
-    for (let i = 0; i < files.length; i++) {
-      try {
-        const sigRes = await fetch('/api/images/upload-signature', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'same-origin',
-          body: JSON.stringify({ category, slot: slot.id }),
-        });
-        if (!sigRes.ok) throw new Error('Could not get upload signature');
-        const sig = (await sigRes.json()) as {
-          signature: string; timestamp: number; api_key: string;
-          cloud_name: string; folder: string; context?: string;
-        };
+    try {
+      const sigRes = await fetch('/api/images/upload-signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ category, slot: slot.id, count: files.length }),
+      });
+      if (!sigRes.ok) throw new Error('Could not get upload signatures');
+      const signatures = (await sigRes.json()) as Array<{
+        signature: string; timestamp: number; api_key: string;
+        cloud_name: string; folder: string; context?: string; public_id?: string;
+      }>;
 
-        const fd = new FormData();
-        fd.append('file', files[i]);
-        fd.append('api_key', sig.api_key);
-        fd.append('timestamp', String(sig.timestamp));
-        fd.append('signature', sig.signature);
-        fd.append('folder', sig.folder);
-        if (sig.context) fd.append('context', sig.context);
+      let doneCount = 0;
+      await Promise.all(
+        files.map(async (file, i) => {
+          const sig = signatures[i];
+          const fd = new FormData();
+          fd.append('file', file);
+          fd.append('api_key', sig.api_key);
+          fd.append('timestamp', String(sig.timestamp));
+          fd.append('signature', sig.signature);
+          fd.append('folder', sig.folder);
+          if (sig.context) fd.append('context', sig.context);
+          if (sig.public_id) fd.append('public_id', sig.public_id);
 
-        const upRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${sig.cloud_name}/auto/upload`,
-          { method: 'POST', body: fd }
-        );
-        if (!upRes.ok) {
-          const txt = await upRes.text();
-          throw new Error(`Upload failed (${files[i].name}): ${txt}`);
-        }
-
-        setUploadProgress({ done: i + 1, total: files.length });
-      } catch (err) {
-        errorMsg = (err as Error).message;
-        break;
-      }
+          const upRes = await fetch(
+            `https://api.cloudinary.com/v1_1/${sig.cloud_name}/auto/upload`,
+            { method: 'POST', body: fd }
+          );
+          if (!upRes.ok) {
+            const txt = await upRes.text();
+            throw new Error(`Upload failed (${file.name}): ${txt}`);
+          }
+          doneCount++;
+          setUploadProgress({ done: doneCount, total: files.length });
+        })
+      );
+    } catch (err) {
+      setUploadError((err as Error).message);
     }
 
     setUploadProgress(null);
-    if (errorMsg) setUploadError(errorMsg);
     await refresh();
   };
 

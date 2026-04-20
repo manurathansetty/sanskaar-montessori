@@ -26,10 +26,12 @@ export default async function handler(
     return res.status(401).json({ error: 'Not authenticated' });
   }
 
-  const { category, slot: slotId } = (req.body ?? {}) as {
+  const { category, slot: slotId, count: rawCount } = (req.body ?? {}) as {
     category?: unknown;
     slot?: unknown;
+    count?: unknown;
   };
+  const count = Math.max(1, Math.min(20, Number(rawCount) || 1));
 
   if (typeof category !== 'string' || typeof slotId !== 'string') {
     return res.status(400).json({ error: 'Missing category or slot' });
@@ -44,29 +46,29 @@ export default async function handler(
 
   try {
     if (slot.type === 'single') {
-      // Cloudinary concatenates folder + public_id when both are sent, so
-      // pass only the slot leaf. Final stored asset id becomes
-      // `sanskaar/<category>/<slotId>` — matching the migration script.
+      // Single slots only ever hold one image — ignore count > 1.
       const params = signUploadParams({
         folder: `sanskaar/${category}`,
         publicId: slotId,
         overwrite: true,
       });
-      return res.status(200).json(params);
+      return res.status(200).json([params]);
     }
 
-    // Collection: pick a default sort = (max existing sort) + 1 so new
-    // uploads land at the end of the grid.
+    // Collection: fetch existing once, generate `count` signatures with
+    // sequential sort values so parallel uploads land in submission order.
     const existing = await listImages(folderPath(category, slotId));
     const maxSort = existing.reduce((m, img) => {
       const s = parseInt(img.context?.custom?.sort ?? '0', 10);
       return s > m ? s : m;
     }, 0);
-    const params = signUploadParams({
-      folder: folderPath(category, slotId),
-      defaultSort: maxSort + 1,
-    });
-    return res.status(200).json(params);
+    const sigs = Array.from({ length: count }, (_, i) =>
+      signUploadParams({
+        folder: folderPath(category, slotId),
+        defaultSort: maxSort + 1 + i,
+      })
+    );
+    return res.status(200).json(sigs);
   } catch (err) {
     return res.status(500).json({ error: (err as Error).message });
   }
