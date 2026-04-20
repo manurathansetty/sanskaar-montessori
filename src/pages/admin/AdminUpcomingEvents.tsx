@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Plus, X, Save, GripVertical, Trash2,
+  Plus, Save, GripVertical, Trash2,
   DoorOpen, CalendarDays, CalendarClock, Star, Heart, Sun, Users, Sparkles,
   School, Baby, Palette, BookOpen, Sprout, Music, Trophy, Leaf, Globe,
   Camera, Gift, Mic2, Paintbrush, FlameKindling, TreePine, Landmark, Hourglass,
