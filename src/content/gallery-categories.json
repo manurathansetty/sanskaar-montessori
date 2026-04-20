@@ -1,0 +1,10 @@
+[
+  { "id": "classroom",      "label": "The Prepared Environment",    "description": "Thoughtfully arranged Montessori classrooms",      "order": 1 },
+  { "id": "practical-life", "label": "Practical Life",              "description": "Everyday skills that build independence",           "order": 2 },
+  { "id": "language",       "label": "Language",                    "description": "Building words and confidence in Kannada and English", "order": 3 },
+  { "id": "mathematics",    "label": "Mathematics",                 "description": "Concrete-to-abstract number work",                  "order": 4 },
+  { "id": "geography",      "label": "Cultural Studies",            "description": "Geography, biology and a sense of the world",       "order": 5 },
+  { "id": "art-craft",      "label": "Art & Creative Expression",   "description": "Printing, colouring and open-ended making",         "order": 6 },
+  { "id": "story-time",     "label": "Story Time & Reading",        "description": "Building a lifelong love for books",                "order": 7 },
+  { "id": "gardening",      "label": "Summer Camp — Gardening",     "description": "Little hands, growing things",                      "order": 8 }
+]

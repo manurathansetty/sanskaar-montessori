@@ -113,3 +113,8 @@ export async function deleteImage(publicId: string): Promise<void> {
   ensureConfigured();
   await cloudinary.uploader.destroy(publicId, { invalidate: true });
 }
+
+export async function renameImage(fromPublicId: string, toPublicId: string): Promise<void> {
+  ensureConfigured();
+  await cloudinary.uploader.rename(fromPublicId, toPublicId, { overwrite: false, invalidate: true });
+}

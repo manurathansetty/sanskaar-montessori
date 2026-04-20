@@ -4,8 +4,7 @@ import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, Ar
 import CloudinaryImage from '../components/CloudinaryImage';
 import { useSlotImages } from '../hooks/useSlotImages';
 
-const FORM_URL =
-  'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
+import { SITE } from '../content/site-content';
 
 const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME ?? '';
 const HERO_GRADIENT =
@@ -27,13 +26,10 @@ const Home: React.FC = () => {
           backgroundPosition: 'center 35%',
         }}
       >
-        <span className="badge">Admissions Open 2026-2027</span>
-        <h1>Sanskaar Montessori</h1>
-        <p className="tagline">Rooted in Values, Growing with Joy</p>
-        <p>
-          A safe, caring and joyful learning environment for children aged 18
-          months to 6 years
-        </p>
+        <span className="badge">{SITE.pages.home.heroBadge}</span>
+        <h1>{SITE.school.name}</h1>
+        <p className="tagline">{SITE.school.tagline}</p>
+        <p>{SITE.pages.home.heroDescription}</p>
       </section>
 
       {/* Highlights */}
@@ -159,7 +155,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <a
-            href={FORM_URL}
+            href={SITE.contact.registrationFormUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-cta-primary"

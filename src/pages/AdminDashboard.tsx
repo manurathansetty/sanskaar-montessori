@@ -33,6 +33,20 @@ const AdminDashboard: React.FC<Props> = ({ phone, onLogout }) => {
             <div style={styles.cardSub}>Gallery, events, founders, home</div>
           </div>
         </a>
+        <a href="/admin/events" style={styles.card}>
+          <div style={styles.cardEmoji}>📅</div>
+          <div>
+            <div style={styles.cardTitle}>Events</div>
+            <div style={styles.cardSub}>Add, edit, reorder events</div>
+          </div>
+        </a>
+        <a href="/admin/settings" style={styles.card}>
+          <div style={styles.cardEmoji}>⚙️</div>
+          <div>
+            <div style={styles.cardTitle}>Settings</div>
+            <div style={styles.cardSub}>School info, phones, page text</div>
+          </div>
+        </a>
       </main>
     </div>
   );
@@ -59,7 +73,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: '#fff',
     cursor: 'pointer',
   },
-  main: { lineHeight: 1.6 },
+  main: { lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '1rem' },
   card: {
     display: 'flex',
     alignItems: 'center',

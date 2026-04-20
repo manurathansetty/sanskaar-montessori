@@ -29,6 +29,13 @@ const AdminImagesCategory: React.FC = () => {
         <h1 style={styles.title}>{category[0].toUpperCase() + category.slice(1)}</h1>
         <Link to="/admin/images" style={styles.back}>← All categories</Link>
       </header>
+      {category === 'gallery' && (
+        <div style={{ marginBottom: '1.25rem' }}>
+          <Link to="/admin/categories" style={styles.manageCatsBtn}>
+            🗂 Manage Categories
+          </Link>
+        </div>
+      )}
       <div style={styles.grid}>
         {slots.map((slot) => (
           <Link
@@ -64,6 +71,7 @@ const styles: Record<string, React.CSSProperties> = {
     textDecoration: 'none',
     color: 'inherit',
   },
+  manageCatsBtn: { display: 'inline-block', padding: '8px 16px', border: '1px solid #3a6a3a', borderRadius: 8, color: '#3a6a3a', textDecoration: 'none', fontSize: 14, fontWeight: 600 },
   cardTitle: { fontSize: 16, fontWeight: 600, marginBottom: 4 },
   cardSub: { fontSize: 13, color: '#666' },
 };

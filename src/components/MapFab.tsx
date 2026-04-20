@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapPin, X, ExternalLink } from 'lucide-react';
-
-const SHARE_URL = 'https://share.google/QyuzA210g7jqGHGS4';
-// Replace with the iframe src from Google Maps → Share → "Embed a map"
-const EMBED_SRC =
-  'https://maps.google.com/maps?q=Sanskaar+Montessori&output=embed';
+import { SITE } from '../content/site-content';
 
 const MapFab: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -43,7 +39,7 @@ const MapFab: React.FC = () => {
         >
           <div className="map-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="map-modal-header">
-              <h3>Visit Sanskaar Montessori</h3>
+              <h3>Visit {SITE.school.name}</h3>
               <button
                 className="map-modal-close"
                 onClick={() => setOpen(false)}
@@ -53,8 +49,8 @@ const MapFab: React.FC = () => {
               </button>
             </div>
             <iframe
-              src={EMBED_SRC}
-              title="Sanskaar Montessori location"
+              src={SITE.contact.maps.embedSrc}
+              title={`${SITE.school.name} location`}
               width="100%"
               height="450"
               style={{ border: 0 }}
@@ -64,7 +60,7 @@ const MapFab: React.FC = () => {
             />
             <div className="map-modal-footer">
               <a
-                href={SHARE_URL}
+                href={SITE.contact.maps.shareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-link"

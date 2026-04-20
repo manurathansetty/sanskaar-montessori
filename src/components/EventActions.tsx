@@ -1,8 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-
-const FORM_URL =
-  'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
+import { SITE } from '../content/site-content';
 
 type Props = {
   primaryLabel?: string;
@@ -11,19 +9,20 @@ type Props = {
 
 const EventActions: React.FC<Props> = ({
   primaryLabel = 'Register Interest',
-  phone = '+919113805407',
+  phone,
 }) => {
+  const tel = phone ?? SITE.contact.primaryPhone;
   return (
     <div className="featured-event-actions">
       <a
-        href={FORM_URL}
+        href={SITE.contact.registrationFormUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="btn-cta-primary"
       >
         {primaryLabel} <ArrowRight size={18} />
       </a>
-      <a href={`tel:${phone}`} className="btn-cta-ghost">
+      <a href={`tel:${tel}`} className="btn-cta-ghost">
         Call to Enquire
       </a>
     </div>

@@ -4,60 +4,19 @@ import CloudinaryImage from '../components/CloudinaryImage';
 import SkeletonBox from '../components/SkeletonBox';
 import { useCategoryImages } from '../hooks/useCategoryImages';
 import type { SlotImage } from '../hooks/useSlotImages';
-import { SLOTS } from '../content/image-slots';
+import { GALLERY_CATEGORIES, SITE } from '../content/site-content';
 
-type CategoryMeta = { title: string; description: string };
-
-const CATEGORY_META: Record<string, CategoryMeta> = {
-  'classroom': {
-    title: 'The Prepared Environment',
-    description: 'Thoughtfully arranged Montessori classrooms',
-  },
-  'practical-life': {
-    title: 'Practical Life',
-    description: 'Everyday skills that build independence',
-  },
-  'language': {
-    title: 'Language',
-    description: 'Building words and confidence in Kannada and English',
-  },
-  'mathematics': {
-    title: 'Mathematics',
-    description: 'Concrete-to-abstract number work',
-  },
-  'geography': {
-    title: 'Cultural Studies',
-    description: 'Geography, biology and a sense of the world',
-  },
-  'art-craft': {
-    title: 'Art & Creative Expression',
-    description: 'Printing, colouring and open-ended making',
-  },
-  'story-time': {
-    title: 'Story Time & Reading',
-    description: 'Building a lifelong love for books',
-  },
-  'gardening': {
-    title: 'Summer Camp — Gardening',
-    description: 'Little hands, growing things',
-  },
-};
-
-// How many skeleton tiles to show per section while loading. Matches the
-// typical count we have post-migration so the layout doesn't jump much.
 const SKELETON_COUNT = 3;
 
 const Gallery: React.FC = () => {
   const { state } = useCategoryImages('gallery');
 
-  const sections = SLOTS.gallery.map((slot) => {
-    const meta = CATEGORY_META[slot.id] ?? { title: slot.label, description: '' };
+  const sections = GALLERY_CATEGORIES.map((cat) => {
     const images: SlotImage[] =
-      state.status === 'success' ? state.slots[slot.id] ?? [] : [];
-    return { slotId: slot.id, ...meta, images };
+      state.status === 'success' ? state.slots[cat.id] ?? [] : [];
+    return { slotId: cat.id, title: cat.label, description: cat.description, images };
   });
 
-  // Flatten loaded images across sections for cross-category lightbox nav.
   const allImages = useMemo(
     () =>
       sections.flatMap((s) =>
@@ -134,8 +93,7 @@ const Gallery: React.FC = () => {
         const max = row.scrollWidth - row.clientWidth;
         const atStart = row.scrollLeft <= 0;
         const atEnd = row.scrollLeft >= max - 1;
-        const enteringPull =
-          (atStart && dx > 0) || (atEnd && dx < 0);
+        const enteringPull = (atStart && dx > 0) || (atEnd && dx < 0);
         if (enteringPull || pulled !== 0) {
           pulled += dx / 3;
           if (atStart && pulled < 0) pulled = 0;
@@ -169,8 +127,8 @@ const Gallery: React.FC = () => {
   return (
     <>
       <div className="page-header">
-        <h1>Gallery</h1>
-        <p>Moments from life at Sanskaar Montessori</p>
+        <h1>{SITE.pages.gallery.header.title}</h1>
+        <p>{SITE.pages.gallery.header.subtitle}</p>
       </div>
 
       {state.status === 'error' && (
@@ -226,19 +184,12 @@ const Gallery: React.FC = () => {
 
       {activeIndex !== null && allImages[activeIndex] && (
         <div className="lightbox" onClick={close} role="dialog" aria-modal="true">
-          <button
-            className="lightbox-close"
-            onClick={close}
-            aria-label="Close"
-          >
+          <button className="lightbox-close" onClick={close} aria-label="Close">
             <X size={28} />
           </button>
           <button
             className="lightbox-nav lightbox-prev"
-            onClick={(e) => {
-              e.stopPropagation();
-              prev();
-            }}
+            onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous photo"
           >
             <ChevronLeft size={32} />
@@ -251,10 +202,7 @@ const Gallery: React.FC = () => {
           />
           <button
             className="lightbox-nav lightbox-next"
-            onClick={(e) => {
-              e.stopPropagation();
-              next();
-            }}
+            onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next photo"
           >
             <ChevronRight size={32} />
@@ -263,14 +211,14 @@ const Gallery: React.FC = () => {
       )}
 
       <div className="cta-banner">
-        <h2>Want to Visit Us?</h2>
-        <p>Come experience Sanskaar Montessori in person.</p>
+        <h2>{SITE.pages.gallery.ctaBanner.title}</h2>
+        <p>{SITE.pages.gallery.ctaBanner.subtitle}</p>
         <div className="cta-banner-actions">
-          <a href="tel:+919113805407" className="btn-cta">
-            <Phone size={18} /> +91 91138 05407
+          <a href={`tel:${SITE.contact.primaryPhone}`} className="btn-cta">
+            <Phone size={18} /> {SITE.contact.phones.find(p => p.tel === SITE.contact.primaryPhone)?.display ?? SITE.contact.primaryPhone}
           </a>
           <a
-            href="https://share.google/QyuzA210g7jqGHGS4"
+            href={SITE.contact.maps.shareUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-cta btn-cta-outline"
