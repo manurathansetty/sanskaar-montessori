@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { SITE } from '../content/site-content';
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,8 +12,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
-        <img src="/logo.jpg" alt="Sanskaar Montessori Logo" />
-        <span>Sanskaar Montessori</span>
+        <img src="/logo.jpg" alt={`${SITE.school.name} Logo`} />
+        <span>{SITE.school.name}</span>
       </Link>
       <button
         className={`hamburger ${menuOpen ? 'open' : ''}`}

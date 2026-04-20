@@ -1,29 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit } from 'lucide-react';
+import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit, CalendarDays } from 'lucide-react';
+import CloudinaryImage from '../components/CloudinaryImage';
+import { useSlotImages } from '../hooks/useSlotImages';
 
-const FORM_URL =
-  'https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform';
+import { SITE } from '../content/site-content';
+
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME ?? '';
+const HERO_GRADIENT =
+  'linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%)';
+const HERO_BG = CLOUD_NAME
+  ? `${HERO_GRADIENT}, url("https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,w_1600,q_auto,f_auto/sanskaar/home/hero")`
+  : HERO_GRADIENT;
 
 const Home: React.FC = () => {
+  const langPick = useSlotImages('gallery', 'language');
+  const gardenPick = useSlotImages('gallery', 'gardening');
   return (
     <>
       {/* Hero */}
       <section
         className="hero"
         style={{
-          backgroundImage:
-            'linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(56, 142, 60, 0.72) 40%, rgba(25, 118, 210, 0.78) 100%), url("/gallery/mathematics-03.jpg")',
+          backgroundImage: HERO_BG,
           backgroundPosition: 'center 35%',
         }}
       >
-        <span className="badge">Admissions Open 2026-2027</span>
-        <h1>Sanskaar Montessori</h1>
-        <p className="tagline">Rooted in Values, Growing with Joy</p>
-        <p>
-          A safe, caring and joyful learning environment for children aged 18
-          months to 6 years
-        </p>
+        <span className="badge">{SITE.pages.home.heroBadge}</span>
+        <h1>{SITE.school.name}</h1>
+        <p className="tagline">{SITE.school.tagline}</p>
+        <p>{SITE.pages.home.heroDescription}</p>
       </section>
 
       {/* Highlights */}
@@ -60,13 +66,27 @@ const Home: React.FC = () => {
         </p>
         <div className="glimpses-strip">
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/mathematics-03.jpg" alt="Children at Sanskaar Montessori" loading="lazy" />
+            <CloudinaryImage publicId="sanskaar/home/hero" alt="Children at Sanskaar Montessori" width={600} loading="lazy" />
           </Link>
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/language-kannada-02.jpg" alt="Hands-on Montessori activities" loading="lazy" />
+            {langPick.state.status === 'success' && langPick.state.images[0] && (
+              <CloudinaryImage
+                publicId={langPick.state.images[0].public_id}
+                alt="Hands-on Montessori activities"
+                width={600}
+                loading="lazy"
+              />
+            )}
           </Link>
           <Link to="/gallery" className="glimpse-tile">
-            <img src="/gallery/gardening-03.jpg" alt="Joyful learning moments" loading="lazy" />
+            {gardenPick.state.status === 'success' && gardenPick.state.images[0] && (
+              <CloudinaryImage
+                publicId={gardenPick.state.images[0].public_id}
+                alt="Joyful learning moments"
+                width={600}
+                loading="lazy"
+              />
+            )}
           </Link>
         </div>
         <div className="glimpses-cta">
@@ -135,7 +155,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <a
-            href={FORM_URL}
+            href={SITE.contact.registrationFormUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-cta-primary"
@@ -144,6 +164,32 @@ const Home: React.FC = () => {
           </a>
         </div>
       </section>
+
+      {/* Upcoming Events — only renders when array is non-empty */}
+      {SITE.upcomingEvents && SITE.upcomingEvents.length > 0 && (
+        <div className="section-alt">
+          <section className="section">
+            <h2>Upcoming Events</h2>
+            <p className="section-subtitle">What's coming up at Sanskaar Montessori</p>
+            <div className="cards">
+              {SITE.upcomingEvents.map((ev, i) => (
+                <div key={i} className="card">
+                  <div className="card-icon"><CalendarDays size={32} /></div>
+                  <h3>{ev.title}</h3>
+                  <p className="card-date" style={{ fontSize: 13, fontWeight: 600, color: '#2e7d32', marginBottom: 6 }}>{ev.date}</p>
+                  <p>{ev.description}</p>
+                  {ev.link && (
+                    <a href={ev.link} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: 14, color: '#2e7d32', textDecoration: 'none', fontWeight: 600 }}>
+                      Learn more <ArrowRight size={14} />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
 
       {/* Admissions Banner */}
       <Link

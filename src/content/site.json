@@ -1,0 +1,47 @@
+{
+  "school": {
+    "name": "Sanskaar Montessori",
+    "tagline": "Rooted in Values, Growing with Joy"
+  },
+  "contact": {
+    "phones": [
+      { "tel": "+919113805407", "display": "+91 91138 05407", "label": "Mobile" },
+      { "tel": "+918105358074", "display": "+91 81053 58074", "label": "Mobile" },
+      { "tel": "08041723420",   "display": "080 4172 3420",   "label": "Landline" }
+    ],
+    "primaryPhone": "+919113805407",
+    "registrationFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSemG7oTdole_VKTfNFKNOEYb_mmpjDFCT2mLMqWyxBvip_MlQ/viewform",
+    "maps": {
+      "shareUrl": "https://share.google/QyuzA210g7jqGHGS4",
+      "embedSrc": "https://maps.google.com/maps?q=Sanskaar+Montessori&output=embed"
+    }
+  },
+  "upcomingEvents": [
+    {
+      "icon": "DoorOpen",
+      "title": "Open House at Sanskaar Montessori",
+      "subtitle": "Visit us, meet our educators and see our Montessori approach in action",
+      "date": "Dates to be announced",
+      "description": "An Open House at Sanskaar Montessori is a welcoming opportunity for parents to step into our learning environment and experience our philosophy in action. It is a time to explore our thoughtfully prepared classrooms, understand the Montessori approach we follow and see how children learn through hands-on experiences and real-life connections.\n\nDuring the Open House, parents can interact with our educators, gain insights into our child-centric practices and understand how we nurture independence, values and a love for learning.",
+      "link": ""
+    }
+  ],
+  "pages": {
+    "home": {
+      "heroBadge": "Admissions Open 2026-2027",
+      "heroDescription": "A safe, caring and joyful learning environment for children aged 18 months to 6 years"
+    },
+    "gallery": {
+      "header":    { "title": "Gallery",            "subtitle": "Moments from life at Sanskaar Montessori" },
+      "ctaBanner": { "title": "Want to Visit Us?",  "subtitle": "Come experience Sanskaar Montessori in person." }
+    },
+    "events": {
+      "header":    { "title": "Programmes & Events", "subtitle": "Our ongoing programmes and upcoming events at Sanskaar Montessori" },
+      "ctaBanner": { "title": "Have Questions?",     "subtitle": "Call us — we'd love to tell you more about our programs." }
+    },
+    "founders": {
+      "header":    { "title": "About the Founders",  "subtitle": "Meet the passionate educators behind Sanskaar Montessori" },
+      "ctaBanner": { "title": "Want to Know More?",  "subtitle": "We'd love to hear from you. Get in touch today." }
+    }
+  }
+}

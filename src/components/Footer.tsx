@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SITE } from '../content/site-content';
 
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-col">
-          <h4>Sanskaar Montessori</h4>
-          <p>Rooted in Values, Growing with Joy</p>
+          <h4>{SITE.school.name}</h4>
+          <p>{SITE.school.tagline}</p>
           <p style={{ marginTop: '0.75rem' }}>
             A safe, caring and joyful learning environment for children aged 18 months to 6 years.
           </p>
@@ -26,23 +27,21 @@ const Footer: React.FC = () => {
           <h4>Contact Us</h4>
           <p>
             Phone:<br />
-            <a href="tel:+919113805407">+91 91138 05407</a><br />
-            <a href="tel:+918105358074">+91 81053 58074</a><br />
-            <a href="tel:08041723420">080 4172 3420</a>
+            {SITE.contact.phones.map((p) => (
+              <React.Fragment key={p.tel}>
+                <a href={`tel:${p.tel}`}>{p.display}</a><br />
+              </React.Fragment>
+            ))}
           </p>
           <p style={{ marginTop: '0.75rem' }}>
-            <a
-              href="https://share.google/QyuzA210g7jqGHGS4"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={SITE.contact.maps.shareUrl} target="_blank" rel="noopener noreferrer">
               📍 Find us on Google Maps
             </a>
           </p>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2026 Sanskaar Montessori. All rights reserved.</p>
+        <p>&copy; 2026 {SITE.school.name}. All rights reserved.</p>
       </div>
     </footer>
   );

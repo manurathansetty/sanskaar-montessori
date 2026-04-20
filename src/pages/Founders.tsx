@@ -1,13 +1,15 @@
 import React from 'react';
 import { Leaf, Heart, Globe } from 'lucide-react';
+import { SITE } from '../content/site-content';
+import CloudinaryImage from '../components/CloudinaryImage';
 
 const Founders: React.FC = () => {
   return (
     <>
       {/* Page Header */}
       <div className="page-header">
-        <h1>About the Founders</h1>
-        <p>Meet the passionate educators behind Sanskaar Montessori</p>
+        <h1>{SITE.pages.founders.header.title}</h1>
+        <p>{SITE.pages.founders.header.subtitle}</p>
       </div>
 
       {/* Founders */}
@@ -18,7 +20,7 @@ const Founders: React.FC = () => {
         </p>
         <div className="founder-article">
           <div className="founder-photo">
-            <img src="/sushma.jpg" alt="Smt. Sushma Nagendra" />
+            <CloudinaryImage publicId="sanskaar/founders/sushma" alt="Smt. Sushma Nagendra" width={600} aspectRatio={3 / 4} fit="fit" />
           </div>
           <h3>Smt. Sushma Nagendra</h3>
           <p className="role">Founder &amp; Director</p>
@@ -35,7 +37,7 @@ const Founders: React.FC = () => {
 
         <div className="founder-article">
           <div className="founder-photo">
-            <img src="/shwetha.jpg" alt="Smt. Shwetha V" />
+            <CloudinaryImage publicId="sanskaar/founders/shwetha" alt="Smt. Shwetha V" width={600} aspectRatio={3 / 4} fit="fit" />
           </div>
           <h3>Smt. Shwetha V</h3>
           <p className="role">Co-Founder &amp; Director</p>
@@ -90,10 +92,10 @@ const Founders: React.FC = () => {
 
       {/* CTA */}
       <div className="cta-banner">
-        <h2>Want to Know More?</h2>
-        <p>We'd love to hear from you. Get in touch today.</p>
-        <a href="tel:+919113805407" className="btn-cta">
-          Call Us: +91 91138 05407
+        <h2>{SITE.pages.founders.ctaBanner.title}</h2>
+        <p>{SITE.pages.founders.ctaBanner.subtitle}</p>
+        <a href={`tel:${SITE.contact.primaryPhone}`} className="btn-cta">
+          Call Us: {SITE.contact.phones.find(p => p.tel === SITE.contact.primaryPhone)?.display ?? SITE.contact.primaryPhone}
         </a>
       </div>
     </>
