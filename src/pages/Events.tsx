@@ -2,6 +2,8 @@ import React from 'react';
 import { DoorOpen } from 'lucide-react';
 import EventCard from '../components/EventCard';
 import { EVENTS, SITE } from '../content/site-content';
+import type { UpcomingEvent } from '../content/site-content';
+import { UPCOMING_ICON_MAP } from './admin/AdminUpcomingEvents';
 
 const Events: React.FC = () => {
   const primaryPhone = SITE.contact.phones.find(
@@ -30,28 +32,32 @@ const Events: React.FC = () => {
         );
       })}
 
-      {/* Open House — static section, not managed via content system */}
-      <div className={EVENTS.length % 2 === 0 ? 'section-alt' : ''}>
-        <section className="section">
-          <h2>Open House at Sanskaar Montessori</h2>
-          <p className="section-subtitle">
-            Visit us, meet our educators and see our Montessori approach in action
-          </p>
-          <div className="content-box-featured">
-            <div className="card-icon"><DoorOpen size={40} /></div>
-            <p>
-              An Open House at Sanskaar Montessori is a welcoming opportunity for parents to step into our learning environment and experience our philosophy in action. It is a time to explore our thoughtfully prepared classrooms, understand the Montessori approach we follow and see how children learn through hands-on experiences and real-life connections.
-            </p>
-            <p>
-              During the Open House, parents can interact with our educators, gain insights into our child-centric practices and understand how we nurture independence, values and a love for learning.
-            </p>
-            <p className="open-house-meta">
-              <span className="soon-tag">Coming Soon</span>
-              <span>Dates to be announced</span>
-            </p>
+      {/* Upcoming Events — driven by site.json upcomingEvents */}
+      {SITE.upcomingEvents && SITE.upcomingEvents.map((ev: UpcomingEvent, i: number) => {
+        const altIdx = EVENTS.length + i;
+        const icon = UPCOMING_ICON_MAP[ev.icon ?? 'DoorOpen']
+          ? React.cloneElement(UPCOMING_ICON_MAP[ev.icon ?? 'DoorOpen'], { size: 22 })
+          : <DoorOpen size={22} />;
+        return (
+          <div key={i} className={altIdx % 2 === 0 ? 'section-alt' : ''}>
+            <section className="section">
+              <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {icon}{ev.title}
+              </h2>
+              {ev.subtitle && <p className="section-subtitle">{ev.subtitle}</p>}
+              <div className="content-box-featured">
+                {ev.description.split('\n\n').map((para, j) => (
+                  <p key={j}>{para}</p>
+                ))}
+                <p className="open-house-meta">
+                  <span className="soon-tag">Coming Soon</span>
+                  <span>{ev.date}</span>
+                </p>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+        );
+      })}
 
       <div className="cta-banner">
         <h2>{SITE.pages.events.ctaBanner.title}</h2>

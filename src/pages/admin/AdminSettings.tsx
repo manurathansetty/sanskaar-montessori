@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, ChevronRight, Plus, X, Save } from 'lucide-react';
 import { useAdminAuth } from '../../hooks/useAdminAuth';
 import { useToast } from '../../hooks/useToast';
 import { saveErrorMessage } from '../../lib/adminErrors';
 import { SITE } from '../../content/site-content';
 import type { SiteContent, PhoneEntry } from '../../content/site-content';
+import AdminPageShell from '../../components/AdminPageShell';
+import AdminLoadingScreen from '../../components/AdminLoadingScreen';
 
-function deepClone<T>(v: T): T {
-  return JSON.parse(JSON.stringify(v));
-}
+function deepClone<T>(v: T): T { return JSON.parse(JSON.stringify(v)); }
 
 const PAGES = ['home', 'gallery', 'events', 'founders'] as const;
 type PageKey = typeof PAGES[number];
@@ -17,7 +18,7 @@ const AdminSettings: React.FC = () => {
   const { state } = useAdminAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [data, setData] = useState<SiteContent>(deepClone(SITE));
+  const [data, setData] = useState<SiteContent | null>(null);
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState<Set<PageKey>>(new Set<PageKey>(['home']));
 
@@ -25,12 +26,21 @@ const AdminSettings: React.FC = () => {
     if (state.status === 'unauthenticated') navigate('/admin/login', { replace: true });
   }, [state, navigate]);
 
-  if (state.status !== 'authenticated') {
-    return <div style={{ padding: '4rem', textAlign: 'center' }}>Loading…</div>;
+  useEffect(() => {
+    if (state.status !== 'authenticated') return;
+    fetch('/api/content/site', { credentials: 'same-origin' })
+      .then((r) => r.ok ? r.json() as Promise<SiteContent> : Promise.reject())
+      .then((json) => setData(deepClone(json)))
+      .catch(() => setData(deepClone(SITE)));
+  }, [state.status]);
+
+  if (state.status !== 'authenticated' || !data) {
+    return <AdminLoadingScreen />;
   }
 
   const set = (updater: (d: SiteContent) => void) => {
     setData((prev) => {
+      if (!prev) return prev;
       const next = deepClone(prev);
       updater(next);
       return next;
@@ -40,22 +50,18 @@ const AdminSettings: React.FC = () => {
   const togglePage = (key: PageKey) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
+      if (next.has(key)) next.delete(key); else next.add(key);
       return next;
     });
   };
 
-  const addPhone = () =>
-    set((d) => d.contact.phones.push({ tel: '', display: '', label: 'Mobile' }));
-
-  const removePhone = (i: number) =>
-    set((d) => {
-      d.contact.phones.splice(i, 1);
-      if (!d.contact.phones.find((p) => p.tel === d.contact.primaryPhone)) {
-        d.contact.primaryPhone = d.contact.phones[0]?.tel ?? '';
-      }
-    });
+  const addPhone = () => set((d) => d.contact.phones.push({ tel: '', display: '', label: 'Mobile' }));
+  const removePhone = (i: number) => set((d) => {
+    d.contact.phones.splice(i, 1);
+    if (!d.contact.phones.find((p) => p.tel === d.contact.primaryPhone)) {
+      d.contact.primaryPhone = d.contact.phones[0]?.tel ?? '';
+    }
+  });
 
   const save = async () => {
     setSaving(true);
@@ -67,11 +73,8 @@ const AdminSettings: React.FC = () => {
         body: JSON.stringify(data),
       });
       const json = await res.json() as { ok?: boolean; error?: string };
-      if (res.ok) {
-        toast.success('Saved.');
-      } else {
-        toast.error(saveErrorMessage(json.error ?? ''));
-      }
+      if (res.ok) toast.success('Saved.');
+      else toast.error(saveErrorMessage(json.error ?? ''));
     } catch {
       toast.error(saveErrorMessage(''));
     } finally {
@@ -79,104 +82,118 @@ const AdminSettings: React.FC = () => {
     }
   };
 
+  const saveBtn = (
+    <button className="adm-btn-primary" onClick={save} disabled={saving}
+      style={{ cursor: saving ? 'not-allowed' : 'pointer' }}>
+      <Save size={14} /> {saving ? 'Saving…' : 'Save All'}
+    </button>
+  );
+
   return (
-    <div style={s.wrapper}>
-      <header style={s.header}>
-        <div>
-          <h1 style={s.title}>Settings</h1>
-          <Link to="/admin" style={s.back}>← Dashboard</Link>
-        </div>
-        <button style={s.saveBtn} onClick={save} disabled={saving}>
-          {saving ? 'Saving…' : 'Save All'}
-        </button>
-      </header>
+    <AdminPageShell backHref="/admin" backLabel="Dashboard" rightAction={saveBtn} maxWidth={680}>
+      <div style={s.heading}>
+        <h1 style={s.h1}>Site Settings</h1>
+        <p style={s.sub}>School info, contact details, and page text</p>
+      </div>
 
       {/* School */}
-      <section style={s.section}>
-        <h2 style={s.sectionTitle}>School</h2>
-        <label style={s.label}>Name
-          <input style={s.input} value={data.school.name}
+      <section className="adm-section">
+        <div style={s.sectionTitle}>School</div>
+        <label className="adm-label" style={{ marginBottom: 14 }}>Name
+          <input className="adm-input" value={data.school.name}
             onChange={(e) => set((d) => { d.school.name = e.target.value; })} />
         </label>
-        <label style={s.label}>Tagline
-          <input style={s.input} value={data.school.tagline}
+        <label className="adm-label">Tagline
+          <input className="adm-input" value={data.school.tagline}
             onChange={(e) => set((d) => { d.school.tagline = e.target.value; })} />
         </label>
       </section>
 
       {/* Contact */}
-      <section style={s.section}>
-        <h2 style={s.sectionTitle}>Contact</h2>
-        <div style={s.subsectionTitle}>Phone Numbers</div>
+      <section className="adm-section">
+        <div style={s.sectionTitle}>Contact</div>
+        <div style={s.subsection}>Phone Numbers</div>
         {data.contact.phones.map((p, i) => (
           <div key={i} style={s.phoneRow}>
             <label style={s.radioLabel}>
               <input type="radio" name="primaryPhone" checked={data.contact.primaryPhone === p.tel}
                 onChange={() => set((d) => { d.contact.primaryPhone = p.tel; })} />
-              Primary
+              <span style={s.radioText}>Primary</span>
             </label>
-            <input style={{ ...s.input, flex: 1 }} placeholder="tel e.g. +919113805407" value={p.tel}
+            <input className="adm-input" style={{ flex: 1 }} placeholder="+919113805407" value={p.tel}
               onChange={(e) => set((d) => { (d.contact.phones[i] as PhoneEntry).tel = e.target.value; })} />
-            <input style={{ ...s.input, flex: 1 }} placeholder="display e.g. +91 91138 05407" value={p.display}
+            <input className="adm-input" style={{ flex: 1 }} placeholder="+91 91138 05407" value={p.display}
               onChange={(e) => set((d) => { (d.contact.phones[i] as PhoneEntry).display = e.target.value; })} />
-            <input style={{ ...s.input, width: 100 }} placeholder="label" value={p.label}
-              onChange={(e) => set((d) => { (d.contact.phones[i] as PhoneEntry).label = e.target.value; })} />
-            <button style={s.removeBtn} onClick={() => removePhone(i)} title="Remove">×</button>
+            <select className="adm-input" style={{ width: 110 }} value={p.label}
+              onChange={(e) => set((d) => { (d.contact.phones[i] as PhoneEntry).label = e.target.value; })}>
+              <option value="Mobile">Mobile</option>
+              <option value="Landline">Landline</option>
+            </select>
+            <button style={s.iconBtn} onClick={() => removePhone(i)} title="Remove"><X size={14} /></button>
           </div>
         ))}
-        <button style={s.addBtn} onClick={addPhone}>+ Add phone</button>
+        <button className="adm-btn-secondary" style={{ marginTop: 4, marginBottom: 18 }} onClick={addPhone}>
+          <Plus size={13} /> Add phone
+        </button>
 
-        <label style={s.label}>Registration Form URL
-          <input style={s.input} value={data.contact.registrationFormUrl}
+        <label className="adm-label" style={{ marginBottom: 14 }}>Registration Form URL
+          <input className="adm-input" value={data.contact.registrationFormUrl}
             onChange={(e) => set((d) => { d.contact.registrationFormUrl = e.target.value; })} />
         </label>
-        <label style={s.label}>Maps Share URL
-          <input style={s.input} value={data.contact.maps.shareUrl}
+        <label className="adm-label" style={{ marginBottom: 14 }}>Maps Share URL
+          <input className="adm-input" value={data.contact.maps.shareUrl}
             onChange={(e) => set((d) => { d.contact.maps.shareUrl = e.target.value; })} />
         </label>
-        <label style={s.label}>Maps Embed Src
-          <input style={s.input} value={data.contact.maps.embedSrc}
+        <label className="adm-label">Maps Embed Src
+          <input className="adm-input" value={data.contact.maps.embedSrc}
             onChange={(e) => set((d) => { d.contact.maps.embedSrc = e.target.value; })} />
         </label>
       </section>
 
       {/* Pages */}
-      <section style={s.section}>
-        <h2 style={s.sectionTitle}>Pages</h2>
+      <section className="adm-section">
+        <div style={s.sectionTitle}>Pages</div>
         {PAGES.map((key) => (
           <div key={key} style={s.pageBlock}>
             <button style={s.pageToggle} onClick={() => togglePage(key)}>
-              {expanded.has(key) ? '▾' : '▸'} {key.charAt(0).toUpperCase() + key.slice(1)}
+              {expanded.has(key)
+                ? <ChevronDown size={15} style={{ flexShrink: 0 }} />
+                : <ChevronRight size={15} style={{ flexShrink: 0 }} />}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
             {expanded.has(key) && (
               <div style={s.pageFields}>
                 {key === 'home' ? (
                   <>
-                    <label style={s.label}>Hero Badge
-                      <input style={s.input} value={data.pages.home.heroBadge}
+                    <label className="adm-label" style={{ marginBottom: 12 }}>Hero Badge
+                      <input className="adm-input" value={data.pages.home.heroBadge}
                         onChange={(e) => set((d) => { d.pages.home.heroBadge = e.target.value; })} />
                     </label>
-                    <label style={s.label}>Hero Description
-                      <input style={s.input} value={data.pages.home.heroDescription}
+                    <label className="adm-label">Hero Description
+                      <input className="adm-input" value={data.pages.home.heroDescription}
                         onChange={(e) => set((d) => { d.pages.home.heroDescription = e.target.value; })} />
                     </label>
                   </>
                 ) : (
                   <>
-                    <label style={s.label}>Header Title
-                      <input style={s.input} value={(data.pages[key] as { header: { title: string } }).header.title}
+                    <label className="adm-label" style={{ marginBottom: 12 }}>Header Title
+                      <input className="adm-input"
+                        value={(data.pages[key] as { header: { title: string } }).header.title}
                         onChange={(e) => set((d) => { (d.pages[key] as { header: { title: string } }).header.title = e.target.value; })} />
                     </label>
-                    <label style={s.label}>Header Subtitle
-                      <input style={s.input} value={(data.pages[key] as { header: { subtitle: string } }).header.subtitle}
+                    <label className="adm-label" style={{ marginBottom: 12 }}>Header Subtitle
+                      <input className="adm-input"
+                        value={(data.pages[key] as { header: { subtitle: string } }).header.subtitle}
                         onChange={(e) => set((d) => { (d.pages[key] as { header: { subtitle: string } }).header.subtitle = e.target.value; })} />
                     </label>
-                    <label style={s.label}>CTA Title
-                      <input style={s.input} value={(data.pages[key] as { ctaBanner: { title: string } }).ctaBanner.title}
+                    <label className="adm-label" style={{ marginBottom: 12 }}>CTA Title
+                      <input className="adm-input"
+                        value={(data.pages[key] as { ctaBanner: { title: string } }).ctaBanner.title}
                         onChange={(e) => set((d) => { (d.pages[key] as { ctaBanner: { title: string } }).ctaBanner.title = e.target.value; })} />
                     </label>
-                    <label style={s.label}>CTA Subtitle
-                      <input style={s.input} value={(data.pages[key] as { ctaBanner: { subtitle: string } }).ctaBanner.subtitle}
+                    <label className="adm-label">CTA Subtitle
+                      <input className="adm-input"
+                        value={(data.pages[key] as { ctaBanner: { subtitle: string } }).ctaBanner.subtitle}
                         onChange={(e) => set((d) => { (d.pages[key] as { ctaBanner: { subtitle: string } }).ctaBanner.subtitle = e.target.value; })} />
                     </label>
                   </>
@@ -187,35 +204,26 @@ const AdminSettings: React.FC = () => {
         ))}
       </section>
 
-      <div style={{ height: 80 }} />
-      <div style={s.stickyFooter}>
-        <button style={s.saveBtn} onClick={save} disabled={saving}>
-          {saving ? 'Saving…' : 'Save All'}
-        </button>
-      </div>
-    </div>
+
+
+    </AdminPageShell>
   );
 };
 
 const s: Record<string, React.CSSProperties> = {
-  wrapper:      { maxWidth: 720, margin: '2rem auto', padding: '0 1rem' },
-  header:       { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '1rem' },
-  title:        { margin: 0 },
-  back:         { fontSize: 14, color: '#3a6a3a', textDecoration: 'none' },
-  saveBtn:      { padding: '10px 22px', background: '#3a6a3a', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' },
-  section:      { background: '#fff', border: '1px solid #e6e6e6', borderRadius: 10, padding: '1.5rem', marginBottom: '1.5rem' },
-  sectionTitle: { margin: '0 0 1rem', fontSize: 16, fontWeight: 700 },
-  subsectionTitle: { fontSize: 14, fontWeight: 600, color: '#555', marginBottom: 8 },
-  label:        { display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: '#444', marginBottom: 12 },
-  input:        { padding: '8px 10px', fontSize: 14, border: '1px solid #ddd', borderRadius: 6, outline: 'none' },
+  loading:      { padding: '4rem', textAlign: 'center', color: '#9a9288' },
+  heading:      { marginBottom: '1.75rem' },
+  h1:           { margin: '0 0 4px', fontSize: 28, fontWeight: 600, color: '#1a3a1a', fontFamily: "'Fraunces', serif", letterSpacing: '-0.02em' },
+  sub:          { margin: 0, fontSize: 14, color: '#9a9288', fontWeight: 500 },
+  sectionTitle: { fontSize: 13, fontWeight: 700, color: '#5a6e5a', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 },
+  subsection:   { fontSize: 12, fontWeight: 700, color: '#9a9288', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.05em' },
   phoneRow:     { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 },
-  radioLabel:   { display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, whiteSpace: 'nowrap' },
-  removeBtn:    { fontSize: 18, lineHeight: 1, background: 'none', border: '1px solid #ddd', borderRadius: 4, cursor: 'pointer', padding: '2px 8px', color: '#c00' },
-  addBtn:       { fontSize: 13, color: '#3a6a3a', background: 'none', border: '1px dashed #3a6a3a', borderRadius: 6, padding: '6px 12px', cursor: 'pointer', marginTop: 4, marginBottom: 16 },
-  pageBlock:    { borderBottom: '1px solid #f0f0f0', paddingBottom: 8, marginBottom: 8 },
-  pageToggle:   { background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, padding: '4px 0' },
-  pageFields:   { paddingLeft: 16, paddingTop: 8 },
-  stickyFooter: { position: 'fixed', bottom: 0, left: 0, right: 0, background: '#fff', borderTop: '1px solid #e6e6e6', padding: '12px 16px', display: 'flex', justifyContent: 'flex-end' },
+  radioLabel:   { display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 },
+  radioText:    { fontSize: 12, fontWeight: 600, color: '#5a6e5a', whiteSpace: 'nowrap' as const },
+  iconBtn:      { width: 32, height: 32, borderRadius: 8, border: '1.5px solid #e2ddd4', background: '#faf7f1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9b3a1a', flexShrink: 0 },
+  pageBlock:    { borderBottom: '1px solid #f0ece4', paddingBottom: 10, marginBottom: 10 },
+  pageToggle:   { background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, padding: '4px 0', color: '#1a3a1a', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' },
+  pageFields:   { paddingLeft: 22, paddingTop: 12, paddingBottom: 4, display: 'flex', flexDirection: 'column', gap: 0 },
 };
 
 export default AdminSettings;

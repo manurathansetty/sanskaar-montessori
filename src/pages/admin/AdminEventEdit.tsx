@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Plus, X, Save } from 'lucide-react';
 import { useAdminAuth } from '../../hooks/useAdminAuth';
 import { useToast } from '../../hooks/useToast';
 import { saveErrorMessage } from '../../lib/adminErrors';
@@ -7,18 +8,13 @@ import { slugify } from '../../lib/slugify';
 import { EVENTS } from '../../content/site-content';
 import type { EventConfig, EventPill, EventType } from '../../content/site-content';
 import CloudinaryImage from '../../components/CloudinaryImage';
+import AdminPageShell from '../../components/AdminPageShell';
+import AdminLoadingScreen from '../../components/AdminLoadingScreen';
 
 const TYPES: EventType[] = ['featured', 'programme', 'admissions'];
 const TYPE_LABELS: Record<EventType, string> = {
   featured: 'Featured', programme: 'Programme', admissions: 'Admissions',
 };
-
-function blank(): EventConfig {
-  return {
-    id: '', type: 'programme', eyebrow: '', title: '', lede: '',
-    imageSlot: '', pills: [], tags: [], order: EVENTS.length + 1,
-  };
-}
 
 const AdminEventEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,10 +23,8 @@ const AdminEventEdit: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const existing = isNew ? null : EVENTS.find((e) => e.id === id) ?? null;
-  const [form, setForm] = useState<EventConfig>(() =>
-    existing ? JSON.parse(JSON.stringify(existing)) : blank()
-  );
+  const [allEvents, setAllEvents] = useState<EventConfig[] | null>(null);
+  const [form, setForm] = useState<EventConfig | null>(null);
   const [tagInput, setTagInput] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -38,12 +32,36 @@ const AdminEventEdit: React.FC = () => {
     if (state.status === 'unauthenticated') navigate('/admin/login', { replace: true });
   }, [state, navigate]);
 
-  if (state.status !== 'authenticated') {
-    return <div style={{ padding: '4rem', textAlign: 'center' }}>Loading…</div>;
+  useEffect(() => {
+    if (state.status !== 'authenticated') return;
+    fetch('/api/content/events', { credentials: 'same-origin' })
+      .then((r) => r.ok ? r.json() as Promise<EventConfig[]> : Promise.reject())
+      .then((json) => {
+        const sorted = (json as EventConfig[]).sort((a, b) => a.order - b.order);
+        setAllEvents(sorted);
+        const existing = isNew ? null : sorted.find((e) => e.id === id) ?? null;
+        setForm(existing
+          ? JSON.parse(JSON.stringify(existing))
+          : { id: '', type: 'programme', eyebrow: '', title: '', lede: '', imageSlot: '', pills: [], tags: [], order: sorted.length + 1 }
+        );
+      })
+      .catch(() => {
+        setAllEvents([...EVENTS]);
+        const existing = isNew ? null : EVENTS.find((e) => e.id === id) ?? null;
+        setForm(existing
+          ? JSON.parse(JSON.stringify(existing))
+          : { id: '', type: 'programme', eyebrow: '', title: '', lede: '', imageSlot: '', pills: [], tags: [], order: EVENTS.length + 1 }
+        );
+      });
+  }, [state.status]);
+
+  if (state.status !== 'authenticated' || !allEvents || !form) {
+    return <AdminLoadingScreen />;
   }
 
   const set = (updater: (f: EventConfig) => void) => {
     setForm((prev) => {
+      if (!prev) return prev;
       const next = JSON.parse(JSON.stringify(prev)) as EventConfig;
       updater(next);
       return next;
@@ -75,13 +93,10 @@ const AdminEventEdit: React.FC = () => {
   const removeTag = (t: string) => set((f) => { f.tags = f.tags.filter((x) => x !== t); });
 
   const save = async () => {
-    if (!form.title.trim() || !form.lede.trim()) {
-      toast.error('Title and lede are required.');
-      return;
-    }
+    if (!form.title.trim() || !form.lede.trim()) { toast.error('Title and lede are required.'); return; }
     setSaving(true);
     try {
-      const others = EVENTS.filter((e) => e.id !== (isNew ? '' : id));
+      const others = allEvents.filter((e) => e.id !== (isNew ? '' : id));
       const newSlot = { ...form, id: form.id || slugify(form.title), imageSlot: form.imageSlot || slugify(form.title) };
       const list = isNew
         ? [...others, newSlot].map((e, i) => ({ ...e, order: i + 1 }))
@@ -107,120 +122,127 @@ const AdminEventEdit: React.FC = () => {
     }
   };
 
+  const saveBtn = (
+    <button className="adm-btn-primary" onClick={save} disabled={saving}
+      style={{ cursor: saving ? 'not-allowed' : 'pointer' }}>
+      <Save size={14} /> {saving ? 'Saving…' : 'Save'}
+    </button>
+  );
+
   return (
-    <div style={s.wrapper}>
-      <header style={s.header}>
-        <div>
-          <h1 style={s.title}>{isNew ? 'New Event' : 'Edit Event'}</h1>
-          <Link to="/admin/events" style={s.back}>← Events</Link>
-        </div>
-      </header>
+    <AdminPageShell backHref="/admin/events" backLabel="Events" rightAction={saveBtn} maxWidth={640}>
+      <div style={s.heading}>
+        <h1 style={s.h1}>{isNew ? 'New Event' : 'Edit Event'}</h1>
+      </div>
 
-      <div style={s.form}>
-        <label style={s.label}>Title
-          <input style={s.input} value={form.title} onChange={(e) => onTitleChange(e.target.value)} />
+      <div style={s.card}>
+        {/* Title */}
+        <label className="adm-label">Title
+          <input className="adm-input" value={form.title} onChange={(e) => onTitleChange(e.target.value)} />
         </label>
 
-        <label style={s.label}>Eyebrow <span style={s.hint}>(short identifier shown above heading)</span>
-          <input style={s.input} value={form.eyebrow} onChange={(e) => set((f) => { f.eyebrow = e.target.value; })} />
+        {/* Eyebrow */}
+        <label className="adm-label">
+          Eyebrow <span style={s.hint}>— short identifier above heading</span>
+          <input className="adm-input" value={form.eyebrow}
+            onChange={(e) => set((f) => { f.eyebrow = e.target.value; })} />
         </label>
 
-        <label style={s.label}>Type
-          <select style={s.input} value={form.type} onChange={(e) => set((f) => { f.type = e.target.value as EventType; })}>
+        {/* Type */}
+        <label className="adm-label">Type
+          <select className="adm-input" value={form.type}
+            onChange={(e) => set((f) => { f.type = e.target.value as EventType; })}>
             {TYPES.map((t) => <option key={t} value={t}>{TYPE_LABELS[t]}</option>)}
           </select>
         </label>
 
-        <label style={s.label}>Lede
-          <textarea style={{ ...s.input, minHeight: 80, resize: 'vertical' }} value={form.lede}
+        {/* Lede */}
+        <label className="adm-label">Lede
+          <textarea className="adm-input" style={s.textarea} value={form.lede}
             onChange={(e) => set((f) => { f.lede = e.target.value; })} />
         </label>
 
-        <div style={s.label}>
-          <span>Image slot: <code>{form.imageSlot || '(auto-derived from title)'}</code></span>
+        {/* Image slot */}
+        <div className="adm-label">
+          <span>Image Slot</span>
+          <div style={s.slotCode}>{form.imageSlot || <span style={{ color: '#9a9288' }}>auto-derived from title</span>}</div>
           {form.imageSlot && (
-            <>
-              <div style={{ marginTop: 8, maxWidth: 240 }}>
+            <div style={{ marginTop: 10 }}>
+              <div style={s.imgPreview}>
                 <CloudinaryImage publicId={`sanskaar/events/${form.imageSlot}`} alt={form.eyebrow} width={480} />
               </div>
-              <a
-                href={`/admin/images/events/${form.imageSlot}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={s.link}
-              >
-                Replace via image admin ↗
-              </a>
-            </>
+              <a href={`/admin/images/events/${form.imageSlot}`} target="_blank" rel="noopener noreferrer"
+                style={s.imgLink}>Replace via image admin ↗</a>
+            </div>
           )}
         </div>
 
-        <div style={s.label}>
+        {/* Pills */}
+        <div className="adm-label">
           <span>Pills</span>
           {form.pills.map((pill, i) => (
             <div key={i} style={s.pillRow}>
-              <input style={{ ...s.input, flex: 1 }} placeholder="Label" value={pill.label}
+              <input className="adm-input" style={{ flex: 1 }} placeholder="Label" value={pill.label}
                 onChange={(e) => setPill(i, 'label', e.target.value)} />
-              <input style={{ ...s.input, flex: 2 }} placeholder="Value" value={pill.value}
+              <input className="adm-input" style={{ flex: 2 }} placeholder="Value" value={pill.value}
                 onChange={(e) => setPill(i, 'value', e.target.value)} />
-              <button style={s.removeBtn} onClick={() => removePill(i)}>×</button>
+              <button style={s.iconBtn} onClick={() => removePill(i)}><X size={14} /></button>
             </div>
           ))}
-          <button style={s.addBtn} onClick={addPill}>+ Add pill</button>
-        </div>
-
-        <div style={s.label}>
-          <span>Tags</span>
-          <div style={s.chips}>
-            {form.tags.map((tag) => (
-              <span key={tag} style={s.chip}>
-                {tag}
-                <button style={s.chipX} onClick={() => removeTag(tag)}>×</button>
-              </span>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-            <input
-              style={{ ...s.input, flex: 1 }}
-              placeholder="Type a tag and press Enter"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
-            />
-            <button style={s.addBtn} onClick={addTag}>Add</button>
-          </div>
-        </div>
-
-        <div style={s.formFooter}>
-          <button style={s.saveBtn} onClick={save} disabled={saving}>
-            {saving ? 'Saving…' : 'Save'}
+          <button className="adm-btn-secondary" style={{ alignSelf: 'flex-start', marginTop: 6 }} onClick={addPill}>
+            <Plus size={13} /> Add pill
           </button>
-          <Link to="/admin/events" style={s.cancelBtn}>Cancel</Link>
+        </div>
+
+        {/* Tags */}
+        <div className="adm-label">
+          <span>Tags</span>
+          {form.tags.length > 0 && (
+            <div style={s.chips}>
+              {form.tags.map((tag) => (
+                <span key={tag} style={s.chip}>
+                  {tag}
+                  <button style={s.chipX} onClick={() => removeTag(tag)}><X size={11} /></button>
+                </span>
+              ))}
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+            <input className="adm-input" style={{ flex: 1 }} placeholder="Type a tag and press Enter"
+              value={tagInput} onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }} />
+            <button className="adm-btn-secondary" onClick={addTag}>Add</button>
+          </div>
         </div>
       </div>
-    </div>
+
+      <div style={s.footer}>
+        <button className="adm-btn-primary" onClick={save} disabled={saving}>
+          <Save size={14} /> {saving ? 'Saving…' : 'Save'}
+        </button>
+        <Link to="/admin/events" style={s.cancelLink}>Cancel</Link>
+      </div>
+    </AdminPageShell>
   );
 };
 
 const s: Record<string, React.CSSProperties> = {
-  wrapper:    { maxWidth: 680, margin: '2rem auto', padding: '0 1rem 4rem' },
-  header:     { marginBottom: '2rem' },
-  title:      { margin: 0 },
-  back:       { fontSize: 14, color: '#3a6a3a', textDecoration: 'none' },
-  form:       { background: '#fff', border: '1px solid #e6e6e6', borderRadius: 10, padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: 20 },
-  label:      { display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600, color: '#333' },
-  hint:       { fontWeight: 400, color: '#888', marginLeft: 4 },
-  input:      { padding: '8px 10px', fontSize: 14, border: '1px solid #ddd', borderRadius: 6, outline: 'none', fontFamily: 'inherit' },
-  link:       { fontSize: 13, color: '#3a6a3a', marginTop: 4 },
-  pillRow:    { display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' },
-  removeBtn:  { fontSize: 18, background: 'none', border: '1px solid #ddd', borderRadius: 4, cursor: 'pointer', padding: '2px 8px', color: '#c00', flexShrink: 0 },
-  addBtn:     { alignSelf: 'flex-start', fontSize: 13, color: '#3a6a3a', background: 'none', border: '1px dashed #3a6a3a', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' },
-  chips:      { display: 'flex', flexWrap: 'wrap', gap: 6 },
-  chip:       { display: 'inline-flex', alignItems: 'center', gap: 4, padding: '4px 10px', background: '#e8f5e9', borderRadius: 20, fontSize: 13, color: '#2e7d32' },
-  chipX:      { background: 'none', border: 'none', cursor: 'pointer', color: '#2e7d32', fontSize: 14, lineHeight: 1 },
-  formFooter: { display: 'flex', gap: 12, alignItems: 'center', paddingTop: 8 },
-  saveBtn:    { padding: '10px 24px', background: '#3a6a3a', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' },
-  cancelBtn:  { fontSize: 14, color: '#666', textDecoration: 'none' },
+  loading:  { padding: '4rem', textAlign: 'center', color: '#9a9288' },
+  heading:  { marginBottom: '1.5rem' },
+  h1:       { margin: 0, fontSize: 28, fontWeight: 600, color: '#1a3a1a', fontFamily: "'Fraunces', serif", letterSpacing: '-0.02em' },
+  hint:     { fontWeight: 400, color: '#9a9288', fontSize: 10, textTransform: 'none', letterSpacing: 0 },
+  card:     { background: '#fffdf8', border: '1.5px solid #e8e2d6', borderRadius: 14, padding: '1.5rem 1.5rem', display: 'flex', flexDirection: 'column', gap: 20 },
+  textarea: { minHeight: 80, resize: 'vertical' as const },
+  slotCode: { padding: '9px 12px', background: '#f5f0e8', borderRadius: 8, fontSize: 13, fontFamily: 'monospace', color: '#5a4a3a', letterSpacing: '0.02em' },
+  imgPreview: { maxWidth: 260, borderRadius: 10, overflow: 'hidden', border: '1.5px solid #e8e2d6' },
+  imgLink:  { display: 'inline-block', marginTop: 6, fontSize: 13, color: '#1d4a1d', textDecoration: 'none' },
+  pillRow:  { display: 'flex', gap: 8, marginBottom: 6, alignItems: 'center' },
+  iconBtn:  { width: 32, height: 32, borderRadius: 8, border: '1.5px solid #e2ddd4', background: '#faf7f1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9b3a1a', flexShrink: 0 },
+  chips:    { display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 },
+  chip:     { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#e8f0e8', borderRadius: 20, fontSize: 12, color: '#2e6b30', fontWeight: 600 },
+  chipX:    { background: 'none', border: 'none', cursor: 'pointer', color: '#2e6b30', display: 'flex', alignItems: 'center', padding: 0 },
+  footer:   { marginTop: '1.5rem', display: 'flex', gap: 12, alignItems: 'center' },
+  cancelLink: { fontSize: 14, color: '#9a9288', textDecoration: 'none' },
 };
 
 export default AdminEventEdit;

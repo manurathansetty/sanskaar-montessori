@@ -114,6 +114,17 @@ export async function deleteImage(publicId: string): Promise<void> {
   await cloudinary.uploader.destroy(publicId, { invalidate: true });
 }
 
+export async function getImageByPublicId(publicId: string): Promise<CloudinaryResource | null> {
+  ensureConfigured();
+  const result = await cloudinary.search
+    .expression(`public_id="${publicId}"`)
+    .with_field('context')
+    .max_results(1)
+    .execute();
+  const resources = (result.resources ?? []) as CloudinaryResource[];
+  return resources[0] ?? null;
+}
+
 export async function renameImage(fromPublicId: string, toPublicId: string): Promise<void> {
   ensureConfigured();
   await cloudinary.uploader.rename(fromPublicId, toPublicId, { overwrite: false, invalidate: true });

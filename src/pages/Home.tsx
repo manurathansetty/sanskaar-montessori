@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit } from 'lucide-react';
+import { Sprout, BookOpen, Star, Home as HomeIcon, Baby, Palette, Heart, Sun, ArrowRight, ClipboardEdit, CalendarDays } from 'lucide-react';
 import CloudinaryImage from '../components/CloudinaryImage';
 import { useSlotImages } from '../hooks/useSlotImages';
 
@@ -164,6 +164,32 @@ const Home: React.FC = () => {
           </a>
         </div>
       </section>
+
+      {/* Upcoming Events — only renders when array is non-empty */}
+      {SITE.upcomingEvents && SITE.upcomingEvents.length > 0 && (
+        <div className="section-alt">
+          <section className="section">
+            <h2>Upcoming Events</h2>
+            <p className="section-subtitle">What's coming up at Sanskaar Montessori</p>
+            <div className="cards">
+              {SITE.upcomingEvents.map((ev, i) => (
+                <div key={i} className="card">
+                  <div className="card-icon"><CalendarDays size={32} /></div>
+                  <h3>{ev.title}</h3>
+                  <p className="card-date" style={{ fontSize: 13, fontWeight: 600, color: '#2e7d32', marginBottom: 6 }}>{ev.date}</p>
+                  <p>{ev.description}</p>
+                  {ev.link && (
+                    <a href={ev.link} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: 14, color: '#2e7d32', textDecoration: 'none', fontWeight: 600 }}>
+                      Learn more <ArrowRight size={14} />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
 
       {/* Admissions Banner */}
       <Link

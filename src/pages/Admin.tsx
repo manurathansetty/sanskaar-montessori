@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../hooks/useAdminAuth';
 import AdminDashboard from './AdminDashboard';
+import AdminLoadingScreen from '../components/AdminLoadingScreen';
 
 const Admin: React.FC = () => {
   const { state, logout } = useAdminAuth();
@@ -14,9 +15,7 @@ const Admin: React.FC = () => {
   }, [state, navigate]);
 
   if (state.status === 'loading') {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>Loading…</div>
-    );
+    return <AdminLoadingScreen />;
   }
   if (state.status === 'unauthenticated') {
     return null; // redirect in useEffect

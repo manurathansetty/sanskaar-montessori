@@ -16,6 +16,16 @@
       "embedSrc": "https://maps.google.com/maps?q=Sanskaar+Montessori&output=embed"
     }
   },
+  "upcomingEvents": [
+    {
+      "icon": "DoorOpen",
+      "title": "Open House at Sanskaar Montessori",
+      "subtitle": "Visit us, meet our educators and see our Montessori approach in action",
+      "date": "Dates to be announced",
+      "description": "An Open House at Sanskaar Montessori is a welcoming opportunity for parents to step into our learning environment and experience our philosophy in action. It is a time to explore our thoughtfully prepared classrooms, understand the Montessori approach we follow and see how children learn through hands-on experiences and real-life connections.\n\nDuring the Open House, parents can interact with our educators, gain insights into our child-centric practices and understand how we nurture independence, values and a love for learning.",
+      "link": ""
+    }
+  ],
   "pages": {
     "home": {
       "heroBadge": "Admissions Open 2026-2027",

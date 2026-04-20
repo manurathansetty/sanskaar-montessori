@@ -1,8 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Upload, RefreshCw, Lock } from 'lucide-react';
 import CloudinaryImage from '../../components/CloudinaryImage';
 import { useSlotImages } from '../../hooks/useSlotImages';
 import type { Category, SlotDef } from '../../content/image-slots';
+import AdminPageShell from '../../components/AdminPageShell';
+import AdminLoadingScreen from '../../components/AdminLoadingScreen';
+
+const LOCKED_CATEGORIES = new Set<string>(['founders', 'home']);
 
 type Props = { category: Category; slot: SlotDef };
 
@@ -27,13 +31,8 @@ const AdminSlotSingle: React.FC<Props> = ({ category, slot }) => {
       });
       if (!sigRes.ok) throw new Error('Could not get upload signature');
       const sig = (await sigRes.json()) as {
-        signature: string;
-        timestamp: number;
-        api_key: string;
-        cloud_name: string;
-        folder: string;
-        public_id: string;
-        overwrite: boolean;
+        signature: string; timestamp: number; api_key: string;
+        cloud_name: string; folder: string; public_id: string; overwrite: boolean;
       };
 
       const fd = new FormData();
@@ -51,7 +50,7 @@ const AdminSlotSingle: React.FC<Props> = ({ category, slot }) => {
       );
       if (!upRes.ok) {
         const txt = await upRes.text();
-        throw new Error(`Cloudinary upload failed: ${txt}`);
+        throw new Error(`Upload failed: ${txt}`);
       }
       await refresh();
     } catch (err) {
@@ -61,80 +60,88 @@ const AdminSlotSingle: React.FC<Props> = ({ category, slot }) => {
     }
   };
 
-  const current =
-    state.status === 'success' && state.images.length > 0 ? state.images[0] : null;
+  const current = state.status === 'success' && state.images.length > 0 ? state.images[0] : null;
+  const locked = LOCKED_CATEGORIES.has(category);
+
+  const uploadBtn = locked ? (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9a9288', fontWeight: 600 }}>
+      <Lock size={13} /> Locked — contact developer
+    </div>
+  ) : (
+    <button className="adm-btn-primary" onClick={() => fileRef.current?.click()} disabled={busy}
+      style={{ cursor: busy ? 'not-allowed' : 'pointer' }}>
+      {busy ? <><RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> Uploading…</> : <><Upload size={14} /> {current ? 'Replace image' : 'Upload image'}</>}
+    </button>
+  );
 
   return (
-    <div style={styles.wrapper}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>{slot.label}</h1>
-        <Link to={`/admin/images/${category}`} style={styles.back}>
-          ← Back to {category}
-        </Link>
-      </header>
+    <AdminPageShell
+      backHref={`/admin/images/${category}`}
+      backLabel={category[0].toUpperCase() + category.slice(1)}
+      rightAction={state.status === 'success' ? uploadBtn : undefined}
+      maxWidth={680}
+    >
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      {state.status === 'loading' && <div>Loading…</div>}
-      {state.status === 'error' && <div style={styles.error}>{state.error}</div>}
+      <div style={s.heading}>
+        <h1 style={s.h1}>{slot.label}</h1>
+        <p style={s.sub}>Single image slot · replace to update</p>
+      </div>
+
+      {state.status === 'loading' && <div style={s.loading}>Loading…</div>}
+      {state.status === 'error' && <div style={s.errBox}>{state.error}</div>}
+
       {state.status === 'success' && (
         <>
-          <div style={styles.preview}>
+          <div style={current ? s.preview : s.emptyBox}>
             {current ? (
               <CloudinaryImage publicId={current.public_id} alt={slot.label} width={800} fit="fit" />
             ) : (
-              <div style={styles.empty}>No image yet — upload to set this slot.</div>
+              <div style={s.emptyInner}>
+                <Upload size={28} style={{ color: '#c8c0b4', marginBottom: 8 }} />
+                <div style={s.emptyText}>No image yet</div>
+                <div style={s.emptySub}>Upload a photo to fill this slot</div>
+              </div>
             )}
           </div>
-          <div style={styles.controls}>
-            <button
-              style={styles.replaceBtn}
-              onClick={() => fileRef.current?.click()}
-              disabled={busy}
-            >
-              {busy ? 'Uploading…' : current ? '⬆ Replace image' : '⬆ Upload image'}
-            </button>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              style={{ display: 'none' }}
-              onChange={onFilePick}
-            />
-            {error && <span style={styles.error}>{error}</span>}
-          </div>
+
+          {!current && !locked && (
+            <div style={{ marginTop: '1.25rem' }}>
+              <button className="adm-btn-primary" onClick={() => fileRef.current?.click()} disabled={busy}>
+                <Upload size={14} /> Upload image
+              </button>
+            </div>
+          )}
+
+          {error && <div style={s.errBox}>{error}</div>}
+
+          {!locked && <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFilePick} />}
         </>
       )}
-    </div>
+    </AdminPageShell>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  wrapper: { maxWidth: 720, margin: '2rem auto', padding: '0 1rem' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
-  title: { margin: 0 },
-  back: { fontSize: 14, color: '#3a6a3a', textDecoration: 'none' },
-  preview: {
-    border: '1px solid #e6e6e6',
-    borderRadius: 8,
-    padding: '1rem',
-    background: '#fff',
-    minHeight: 200,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '1rem',
+const s: Record<string, React.CSSProperties> = {
+  loading:   { padding: '3rem', textAlign: 'center', color: '#9a9288' },
+  heading:   { marginBottom: '1.5rem' },
+  h1:        { margin: '0 0 4px', fontSize: 28, fontWeight: 600, color: '#1a3a1a', fontFamily: "'Fraunces', serif", letterSpacing: '-0.02em' },
+  sub:       { margin: 0, fontSize: 14, color: '#9a9288', fontWeight: 500 },
+  preview:   {
+    background: '#fffdf8', border: '1.5px solid #e8e2d6', borderRadius: 14,
+    overflow: 'hidden', minHeight: 200,
   },
-  controls: { display: 'flex', alignItems: 'center', gap: '1rem' },
-  replaceBtn: {
-    padding: '10px 16px',
-    background: '#3a6a3a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 8,
-    fontSize: 14,
-    cursor: 'pointer',
+  emptyBox:  {
+    background: '#fffdf8', border: '2px dashed #e2ddd4', borderRadius: 14,
+    minHeight: 240, display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
-  empty: { color: '#999' },
-  error: { color: '#b00020', fontSize: 14 },
+  emptyInner: { textAlign: 'center' },
+  emptyText:  { fontSize: 15, fontWeight: 600, color: '#9a9288', marginBottom: 4 },
+  emptySub:   { fontSize: 13, color: '#c0b8ae' },
+  errBox:    {
+    marginTop: '1rem', padding: '10px 14px', background: '#fdf0e8',
+    border: '1px solid #f0cdb8', borderRadius: 10, fontSize: 13, color: '#9b3a1a',
+  },
 };
 
 export default AdminSlotSingle;

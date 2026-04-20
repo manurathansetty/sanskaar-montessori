@@ -6,6 +6,15 @@ export type PhoneEntry = { tel: string; display: string; label: string };
 export type PageHeader = { title: string; subtitle: string };
 export type CtaBanner  = { title: string; subtitle: string };
 
+export type UpcomingEvent = {
+  title: string;
+  subtitle?: string;
+  date: string;
+  description: string;
+  icon?: string;
+  link?: string;
+};
+
 export type SiteContent = {
   school: { name: string; tagline: string };
   contact: {
@@ -14,6 +23,7 @@ export type SiteContent = {
     registrationFormUrl: string;
     maps: { shareUrl: string; embedSrc: string };
   };
+  upcomingEvents: UpcomingEvent[];
   pages: {
     home:     { heroBadge: string; heroDescription: string };
     gallery:  { header: PageHeader; ctaBanner: CtaBanner };

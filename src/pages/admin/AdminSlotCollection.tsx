@@ -1,8 +1,12 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Upload, Trash2, GripVertical, RefreshCw, Lock } from 'lucide-react';
 import CloudinaryImage from '../../components/CloudinaryImage';
 import { useSlotImages, type SlotImage } from '../../hooks/useSlotImages';
 import type { Category, SlotDef } from '../../content/image-slots';
+import AdminPageShell from '../../components/AdminPageShell';
+import AdminLoadingScreen from '../../components/AdminLoadingScreen';
+
+const LOCKED_CATEGORIES = new Set<string>(['founders', 'home']);
 
 type Props = { category: Category; slot: SlotDef };
 
@@ -28,12 +32,8 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
       });
       if (!sigRes.ok) throw new Error('Could not get upload signature');
       const sig = (await sigRes.json()) as {
-        signature: string;
-        timestamp: number;
-        api_key: string;
-        cloud_name: string;
-        folder: string;
-        context?: string;
+        signature: string; timestamp: number; api_key: string;
+        cloud_name: string; folder: string; context?: string;
       };
 
       const fd = new FormData();
@@ -50,7 +50,7 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
       );
       if (!upRes.ok) {
         const txt = await upRes.text();
-        throw new Error(`Cloudinary upload failed: ${txt}`);
+        throw new Error(`Upload failed: ${txt}`);
       }
       await refresh();
     } catch (err) {
@@ -105,106 +105,122 @@ const AdminSlotCollection: React.FC<Props> = ({ category, slot }) => {
     [dragId, state, refresh]
   );
 
-  return (
-    <div style={styles.wrapper}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>{slot.label}</h1>
-        <Link to={`/admin/images/${category}`} style={styles.back}>
-          ← Back to {category}
-        </Link>
-      </header>
+  const locked = LOCKED_CATEGORIES.has(category);
 
-      <div style={styles.controls}>
-        <button
-          style={styles.uploadBtn}
-          onClick={() => fileRef.current?.click()}
-          disabled={uploading}
-        >
-          {uploading ? 'Uploading…' : '⬆ Upload photo'}
-        </button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={onFilePick}
-        />
-        {uploadError && <span style={styles.error}>{uploadError}</span>}
+  const uploadBtn = locked ? (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9a9288', fontWeight: 600 }}>
+      <Lock size={13} /> Locked — contact developer
+    </div>
+  ) : (
+    <button className="adm-btn-primary" onClick={() => fileRef.current?.click()} disabled={uploading}
+      style={{ cursor: uploading ? 'not-allowed' : 'pointer' }}>
+      {uploading
+        ? <><RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> Uploading…</>
+        : <><Upload size={14} /> Upload photo</>}
+    </button>
+  );
+
+  return (
+    <AdminPageShell
+      backHref={`/admin/images/${category}`}
+      backLabel={category[0].toUpperCase() + category.slice(1)}
+      rightAction={uploadBtn}
+      maxWidth={960}
+    >
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .adm-photo-card {
+          position: relative;
+          border: 1.5px solid #e8e2d6;
+          border-radius: 12px;
+          overflow: hidden;
+          background: #fffdf8;
+          cursor: grab;
+          transition: box-shadow 0.18s, transform 0.18s;
+        }
+        .adm-photo-card:hover { box-shadow: 0 6px 18px rgba(29,40,29,0.12); }
+        .adm-photo-card.dragging { opacity: 0.5; transform: scale(0.97); }
+        .adm-del-btn {
+          position: absolute; top: 8px; right: 8px;
+          width: 30px; height: 30px; border-radius: 50%;
+          border: none; background: rgba(0,0,0,0.55);
+          color: #fff; cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          opacity: 0; transition: opacity 0.15s;
+        }
+        .adm-photo-card:hover .adm-del-btn { opacity: 1; }
+        .adm-drag-handle {
+          position: absolute; top: 8px; left: 8px;
+          background: rgba(0,0,0,0.45); border-radius: 6px; padding: 3px 4px;
+          color: #fff; opacity: 0; transition: opacity 0.15s;
+          display: flex; align-items: center;
+        }
+        .adm-photo-card:hover .adm-drag-handle { opacity: 1; }
+      `}</style>
+
+      <div style={s.heading}>
+        <h1 style={s.h1}>{slot.label}</h1>
+        <p style={s.sub}>Drag to reorder · hover to delete</p>
       </div>
 
-      {state.status === 'loading' && <div>Loading…</div>}
-      {state.status === 'error' && <div style={styles.error}>{state.error}</div>}
+      {uploadError && <div style={s.errBox}>{uploadError}</div>}
+
+      {state.status === 'loading' && <div style={s.loading}>Loading…</div>}
+      {state.status === 'error' && <div style={s.errBox}>{state.error}</div>}
+
       {state.status === 'success' && state.images.length === 0 && (
-        <div style={styles.empty}>No photos yet. Upload to get started.</div>
+        <div style={s.emptyBox}>
+          <Upload size={28} style={{ color: '#c8c0b4', marginBottom: 8 }} />
+          <div style={s.emptyText}>No photos yet</div>
+          <div style={s.emptySub}>Click "Upload photo" to get started</div>
+        </div>
       )}
+
       {state.status === 'success' && state.images.length > 0 && (
-        <div style={styles.grid}>
+        <div style={s.grid}>
           {state.images.map((img: SlotImage) => (
             <div
               key={img.public_id}
-              style={styles.card}
-              draggable
-              onDragStart={() => onDragStart(img.public_id)}
+              className={`adm-photo-card${dragId === img.public_id ? ' dragging' : ''}`}
+              draggable={!locked}
+              onDragStart={() => !locked && onDragStart(img.public_id)}
               onDragOver={onDragOver}
-              onDrop={() => onDrop(img.public_id)}
+              onDrop={() => !locked && onDrop(img.public_id)}
+              style={locked ? { cursor: 'default' } : undefined}
             >
               <CloudinaryImage publicId={img.public_id} alt={slot.label} width={400} />
-              <button style={styles.deleteBtn} onClick={() => onDelete(img.public_id)}>
-                ✕
-              </button>
+              {!locked && <div className="adm-drag-handle"><GripVertical size={14} /></div>}
+              {!locked && (
+                <button className="adm-del-btn" onClick={() => onDelete(img.public_id)}>
+                  <Trash2 size={13} />
+                </button>
+              )}
             </div>
           ))}
         </div>
       )}
-      <p style={styles.hint}>Tip: drag a photo onto another to reorder.</p>
-    </div>
+
+      {!locked && <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFilePick} />}
+    </AdminPageShell>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  wrapper: { maxWidth: 960, margin: '2rem auto', padding: '0 1rem' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' },
-  title: { margin: 0 },
-  back: { fontSize: 14, color: '#3a6a3a', textDecoration: 'none' },
-  controls: { display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' },
-  uploadBtn: {
-    padding: '10px 16px',
-    background: '#3a6a3a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 8,
-    fontSize: 14,
-    cursor: 'pointer',
+const s: Record<string, React.CSSProperties> = {
+  loading:   { padding: '3rem', textAlign: 'center', color: '#9a9288' },
+  heading:   { marginBottom: '1.75rem' },
+  h1:        { margin: '0 0 4px', fontSize: 28, fontWeight: 600, color: '#1a3a1a', fontFamily: "'Fraunces', serif", letterSpacing: '-0.02em' },
+  sub:       { margin: 0, fontSize: 14, color: '#9a9288', fontWeight: 500 },
+  grid:      { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '0.75rem' },
+  emptyBox:  {
+    background: '#fffdf8', border: '2px dashed #e2ddd4', borderRadius: 14,
+    minHeight: 220, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
   },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-    gap: '0.75rem',
+  emptyText:  { fontSize: 15, fontWeight: 600, color: '#9a9288', marginBottom: 4 },
+  emptySub:   { fontSize: 13, color: '#c0b8ae' },
+  errBox:    {
+    marginBottom: '1rem', padding: '10px 14px', background: '#fdf0e8',
+    border: '1px solid #f0cdb8', borderRadius: 10, fontSize: 13, color: '#9b3a1a',
   },
-  card: {
-    position: 'relative',
-    border: '1px solid #e6e6e6',
-    borderRadius: 8,
-    overflow: 'hidden',
-    background: '#fff',
-    cursor: 'grab',
-  },
-  deleteBtn: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    width: 28,
-    height: 28,
-    borderRadius: '50%',
-    border: 'none',
-    background: 'rgba(0,0,0,0.6)',
-    color: '#fff',
-    cursor: 'pointer',
-    fontSize: 14,
-  },
-  empty: { padding: '2rem', textAlign: 'center', color: '#999', border: '1px dashed #ddd', borderRadius: 8 },
-  error: { color: '#b00020', fontSize: 14 },
-  hint: { fontSize: 13, color: '#999', marginTop: '1.5rem' },
 };
 
 export default AdminSlotCollection;

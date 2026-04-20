@@ -14,6 +14,7 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminEvents from './pages/admin/AdminEvents';
 import AdminEventEdit from './pages/admin/AdminEventEdit';
 import AdminCategories from './pages/admin/AdminCategories';
+import AdminUpcomingEvents from './pages/admin/AdminUpcomingEvents';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,7 @@ const App: React.FC = () => {
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/events/:id" element={<AdminEventEdit />} />
             <Route path="/admin/categories" element={<AdminCategories />} />
+            <Route path="/admin/upcoming-events" element={<AdminUpcomingEvents />} />
           </Route>
         </Routes>
       </div>

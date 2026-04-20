@@ -1,6 +1,6 @@
 const OWNER  = 'manurathansetty';
 const REPO   = 'sanskaar-montessori';
-const BRANCH = 'master';
+const BRANCH = process.env.GITHUB_BRANCH ?? 'master';
 const BASE   = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
 
 export class GitHubAuthError extends Error {}
