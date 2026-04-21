@@ -1434,6 +1434,22 @@ img {
   margin-bottom: 3.5rem;
 }
 
+.gallery-row-wrap {
+  position: relative;
+}
+
+.gallery-row-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 56px;
+  height: calc(100% - 0.75rem);
+  background: linear-gradient(to right, transparent, var(--white));
+  pointer-events: none;
+  z-index: 1;
+}
+
 .gallery-category-header {
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;

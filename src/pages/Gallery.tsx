@@ -69,6 +69,15 @@ const Gallery: React.FC = () => {
     const cleanups: Array<() => void> = [];
 
     rows.forEach((row) => {
+      // Desktop: convert vertical wheel scroll to horizontal
+      const onWheel = (e: WheelEvent) => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+        e.preventDefault();
+        row.scrollLeft += e.deltaY;
+      };
+      row.addEventListener('wheel', onWheel, { passive: false });
+
+      // Mobile: pull-bounce at edges
       let lastTouchX = 0;
       let pulled = 0;
 
@@ -109,6 +118,7 @@ const Gallery: React.FC = () => {
       row.addEventListener('touchcancel', reset);
 
       cleanups.push(() => {
+        row.removeEventListener('wheel', onWheel);
         row.removeEventListener('touchstart', onTouchStart);
         row.removeEventListener('touchmove', onTouchMove);
         row.removeEventListener('touchend', reset);
@@ -146,12 +156,14 @@ const Gallery: React.FC = () => {
             </div>
 
             {state.status === 'loading' && (
-              <div className={`gallery-row gallery-row-${SKELETON_COUNT}`}>
-                {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                  <div key={i} className="gallery-item">
-                    <SkeletonBox aspectRatio="4 / 3" borderRadius={8} />
-                  </div>
-                ))}
+              <div className="gallery-row-wrap">
+                <div className={`gallery-row gallery-row-${SKELETON_COUNT}`}>
+                  {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                    <div key={i} className="gallery-item">
+                      <SkeletonBox aspectRatio="4 / 3" borderRadius={8} />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -160,22 +172,24 @@ const Gallery: React.FC = () => {
             )}
 
             {state.status === 'success' && cat.images.length > 0 && (
-              <div className={`gallery-row gallery-row-${cat.images.length}`}>
-                {cat.images.map((img) => (
-                  <button
-                    key={img.public_id}
-                    className="gallery-item"
-                    onClick={() => openByPublicId(img.public_id)}
-                    aria-label={`Open ${cat.title} photo`}
-                  >
-                    <CloudinaryImage
-                      publicId={img.public_id}
-                      alt={cat.title}
-                      width={800}
-                      aspectRatio={img.width && img.height ? img.width / img.height : undefined}
-                    />
-                  </button>
-                ))}
+              <div className="gallery-row-wrap">
+                <div className={`gallery-row gallery-row-${cat.images.length}`}>
+                  {cat.images.map((img) => (
+                    <button
+                      key={img.public_id}
+                      className="gallery-item"
+                      onClick={() => openByPublicId(img.public_id)}
+                      aria-label={`Open ${cat.title} photo`}
+                    >
+                      <CloudinaryImage
+                        publicId={img.public_id}
+                        alt={cat.title}
+                        width={800}
+                        aspectRatio={img.width && img.height ? img.width / img.height : undefined}
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
