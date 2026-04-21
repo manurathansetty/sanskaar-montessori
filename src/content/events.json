@@ -7,11 +7,29 @@
     "lede": "Two weeks of music, yoga, drama, gardening and creative play — designed to keep little ones curious, active and happy through the summer break.",
     "imageSlot": "summer-camp",
     "pills": [
-      { "label": "When",      "value": "Apr 15 – Apr 30 · Mon–Fri", "icon": "Calendar" },
-      { "label": "Time",      "value": "10:00 AM – 1:00 PM",        "icon": "Clock"    },
-      { "label": "Age Group", "value": "3+ years",                  "icon": "Users"    }
+      {
+        "label": "When",
+        "value": "Apr 15 – Apr 30 · Mon–Fri",
+        "icon": "Calendar"
+      },
+      {
+        "label": "Time",
+        "value": "10:00 AM – 1:00 PM",
+        "icon": "Clock"
+      },
+      {
+        "label": "Age Group",
+        "value": "3+ years",
+        "icon": "Users"
+      }
     ],
-    "tags": ["Best Out of Waste", "Grow & Eat", "Music · Jana Pada Geethe & Shlokas", "Yoga", "Drama & Theatre"],
+    "tags": [
+      "Best Out of Waste",
+      "Grow & Eat",
+      "Music · Jana Pada Geethe & Shlokas",
+      "Yoga",
+      "Drama & Theatre"
+    ],
     "order": 1
   },
   {
@@ -22,9 +40,21 @@
     "lede": "Admissions are open for children aged 18 months to 6 years. Day care also available for working parents.",
     "imageSlot": "admissions",
     "pills": [
-      { "label": "Age Group",          "value": "18 months – 6 years",  "icon": "Users"       },
-      { "label": "Introductory Offer", "value": "10% off annual fee",    "icon": "BadgePercent" },
-      { "label": "Offer Ends",         "value": "15 May 2026",           "icon": "Calendar"    }
+      {
+        "label": "Age Group",
+        "value": "18 months – 6 years",
+        "icon": "Users"
+      },
+      {
+        "label": "Introductory Offer",
+        "value": "10% off annual fee",
+        "icon": "BadgePercent"
+      },
+      {
+        "label": "Offer Ends",
+        "value": "15 May 2026",
+        "icon": "Calendar"
+      }
     ],
     "tags": [],
     "order": 2
@@ -37,11 +67,29 @@
     "lede": "A safe, loving space filled with care, warmth and joyful learning — just like home. More than daycare, it's where your child is understood, nurtured and celebrated every day.",
     "imageSlot": "day-care",
     "pills": [
-      { "label": "Age Group", "value": "18 months – 6 years", "icon": "Users"  },
-      { "label": "Timings",   "value": "Flexible, full day",   "icon": "Clock"  },
-      { "label": "Safety",    "value": "CCTV monitored",       "icon": "Shield" }
+      {
+        "label": "Age Group",
+        "value": "18 months – 6 years",
+        "icon": "Users"
+      },
+      {
+        "label": "Timings",
+        "value": "Flexible, full day",
+        "icon": "Clock"
+      },
+      {
+        "label": "Safety",
+        "value": "CCTV monitored",
+        "icon": "Shield"
+      }
     ],
-    "tags": ["Warm & Secure Environment", "Caring & Trained Educators", "Montessori-Inspired Activities", "Healthy Routine & Nap Time", "Clean & Hygienic Space"],
+    "tags": [
+      "Warm & Secure Environment",
+      "Caring & Trained Educators",
+      "Montessori-Inspired Activities",
+      "Healthy Routine & Nap Time",
+      "Clean & Hygienic Space"
+    ],
     "order": 3
   },
   {
@@ -52,10 +100,25 @@
     "lede": "A 'home away from home' where children feel secure, happy and inspired to learn, explore and grow every day.",
     "imageSlot": "after-school",
     "pills": [
-      { "label": "Age Group", "value": "3 – 10 years",                   "icon": "Users" },
-      { "label": "Timings",   "value": "Flexible for working parents",    "icon": "Clock" }
+      {
+        "label": "Age Group",
+        "value": "6 years to 12 years",
+        "icon": "Users"
+      },
+      {
+        "label": "Timings",
+        "value": "3:00PM to 6:00PM",
+        "icon": "Clock"
+      }
     ],
-    "tags": ["Homework Support", "Creative Activities", "Science-Based Learning", "Skill Development", "Structured Routine", "Healthy Habits"],
+    "tags": [
+      "Homework Support",
+      "Creative Activities",
+      "Science-Based Learning",
+      "Skill Development",
+      "Structured Routine",
+      "Healthy Habits"
+    ],
     "order": 4
   }
 ]
