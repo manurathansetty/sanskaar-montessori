@@ -1,14 +1,14 @@
 [
   {
-    "id": "practical-life",
-    "label": "Practical Life",
-    "description": "Everyday skills that build independence",
-    "order": 1
-  },
-  {
     "id": "classroom",
     "label": "The Prepared Environment",
     "description": "Thoughtfully arranged Montessori classrooms",
+    "order": 1
+  },
+  {
+    "id": "practical-life",
+    "label": "Practical Life",
+    "description": "Everyday skills that build independence",
     "order": 2
   },
   {
