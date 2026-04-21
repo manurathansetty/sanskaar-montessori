@@ -1,56 +1,56 @@
 [
   {
-    "id": "culinary-art",
-    "label": "Culinary art",
-    "description": "An important skill development for the young children.",
-    "order": 1
-  },
-  {
     "id": "classroom",
     "label": "The Prepared Environment",
     "description": "Thoughtfully arranged Montessori classrooms",
-    "order": 2
+    "order": 1
   },
   {
     "id": "practical-life",
     "label": "Practical Life",
     "description": "Everyday skills that build independence",
-    "order": 3
+    "order": 2
   },
   {
     "id": "language",
     "label": "Language",
     "description": "Building words and confidence in Kannada and English",
-    "order": 4
+    "order": 3
   },
   {
     "id": "mathematics",
     "label": "Numeracy",
     "description": "Concrete-to-abstract number work",
-    "order": 5
+    "order": 4
   },
   {
     "id": "geography",
     "label": "Cultural Studies",
     "description": "Geography, biology and a sense of the world",
-    "order": 6
+    "order": 5
   },
   {
     "id": "art-craft",
     "label": "Art & Creative Expression",
     "description": "Printing, colouring and open-ended making",
-    "order": 7
+    "order": 6
   },
   {
     "id": "story-time",
     "label": "Story Time & Reading",
     "description": "Building a lifelong love for books",
-    "order": 8
+    "order": 7
   },
   {
     "id": "gardening",
     "label": "Summer Camp — Gardening",
     "description": "Little hands, growing things",
+    "order": 8
+  },
+  {
+    "id": "culinary-art",
+    "label": "Culinary art",
+    "description": "An important skill development for the young children.",
     "order": 9
   }
 ]
