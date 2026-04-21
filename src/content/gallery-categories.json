@@ -46,5 +46,11 @@
     "label": "Summer Camp — Gardening",
     "description": "Little hands, growing things",
     "order": 8
+  },
+  {
+    "id": "culinary-art",
+    "label": "Culinary art",
+    "description": "An important skill development for the young children.",
+    "order": 9
   }
 ]
