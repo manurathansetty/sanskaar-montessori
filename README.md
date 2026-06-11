@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# Sanskaar Montessori
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Rooted in Values, Growing with Joy — the official website for Sanskaar Montessori, a Montessori preschool in Bengaluru.
 
-## Available Scripts
+**Live site: [www.sanskaarmontessori.in](https://www.sanskaarmontessori.in)**
 
-In the project directory, you can run:
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.9-3178C6?logo=typescript&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000?logo=vercel&logoColor=white)
 
-### `npm start`
+![Sanskaar Montessori](public/banner.jpg)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## What it is
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+A React + TypeScript single-page website for a Montessori preschool, built as a freelance project. Alongside the public-facing site (home, about, founders, gallery, events), it includes a password-protected admin panel that lets the school staff manage photos, events, and site content themselves — no developer needed for day-to-day updates. The frontend runs as a static SPA; the backend is a set of Vercel serverless functions.
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Public site** — Home, About, Founders, Gallery, and Events pages with a shared layout, navbar, footer, and a floating map button
+- **Photo gallery** — categorised image galleries served via Cloudinary with skeleton loading states
+- **Events** — upcoming and past events rendered from structured JSON content
+- **Admin panel** (`/admin`) — phone + password login, dashboard, and editors for:
+  - Gallery images: upload (signed Cloudinary uploads), reorder, recategorise, delete
+  - Gallery categories
+  - Events and upcoming-event highlights
+  - Image slots and site settings
+- **Git-backed CMS** — admin saves commit content JSON directly back to this repo via the GitHub API, so every content change is versioned and triggers a redeploy
+- **Secure sessions** — `iron-session` cookies (httpOnly, sameSite=strict, 24 h TTL) with constant-time password comparison on login
+- **SEO basics** — sitemap, robots.txt, and web-vitals reporting
 
-### `npm run build`
+## Tech stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend:** React 19, TypeScript, React Router 7, Lucide icons, Create React App (react-scripts)
+- **Backend:** Vercel serverless functions (`@vercel/node`)
+- **Auth:** iron-session
+- **Media:** Cloudinary (storage, transformation, signed uploads)
+- **Content storage:** JSON files in-repo, written via the GitHub Contents API
+- **Hosting:** Vercel
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Requires Node 22 (see `.nvmrc`).
 
-### `npm run eject`
+```bash
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Frontend only (public pages)
+npm start
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Full stack including the /api serverless functions
+npm run vercel:dev
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Production build (validates required env vars first)
+npm run build
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# Tests
+npm test
+```
 
-## Learn More
+For the admin panel and API routes, copy `.env.local.example` to `.env.local` and fill in the admin credentials, session secret, GitHub token, and Cloudinary keys. See `docs/admin-deploy.md` for deployment notes.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Project structure
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+api/            Vercel serverless functions (auth, content saves, image management)
+src/pages/      Public pages + admin pages
+src/components/ Shared UI components
+src/content/    Site content (JSON + typed content modules)
+src/lib/        Session, GitHub API, Cloudinary, helpers
+scripts/        Env validation + Cloudinary migration script
+```
+
+---
+
+Built by [Manu Rathan Setty](https://manurathansetty.github.io)
